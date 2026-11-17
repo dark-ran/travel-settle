@@ -199,7 +199,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 <section>
   <h2><i>05</i>환율 <small>1단위 = 몇 원</small></h2>
   <p class="muted" style="margin-top:0"><b>실제 빠져나간 원화</b>를 적은 기록은 그 금액 그대로 써요. 안 적은 기록은 환율과 카드 수수료로 어림해요(현금은 수수료 없음).<br><b>여행 첫날</b>을 넣으면 기록마다 그 날 환율을 자동으로 쓰고, 아래 환율을 직접 고치거나 지난 환율을 누르면 그 통화는 그 값으로 고정돼요.</p>
-  <div class="rate" style="margin-bottom:8px"><span>첫날</span><input type="date" id="start" aria-label="여행 첫날" style="width:auto"><span class="muted" id="startnote"></span></div>
+  <div class="rate" style="margin-bottom:8px"><span>첫날</span><input type="date" id="start" aria-label="여행 첫날" style="width:160px"><span class="muted" id="startnote"></span></div>
   <div class="rate"><span>카드</span><input type="number" step="any" min="0" id="fee" aria-label="카드 수수료"><span class="muted">% 수수료 (보통 1~2.5%)</span></div>
   <div id="rates"></div>
   <details class="more"><summary>다른 통화 환율</summary><div id="rates2"></div></details>
@@ -374,7 +374,8 @@ function render(){
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'실제 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span title="이 날 환율로 계산">(${rateFor(it,S).date.slice(5).replace('-','/')})</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
-  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" value="${r}" data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?'원 · <b>날짜별 자동</b> (고치면 이 값으로 고정)':S.manual[c]?`원 · 직접 고정 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별 자동으로</button>`:''}`:'원'}</span></div>`;
+  const lastAuto=c=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return ks.length?`${ks.at(-1).slice(5).replace('-','/')} ${S.dayRates[ks.at(-1)][c]}`:'불러오는 중'}; // 자동일 땐 마지막 날 환율을 흐리게
+  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?'원 · <b>날짜별 자동</b> (고치면 이 값으로 고정)':S.manual[c]?`원 · 직접 고정 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별 자동으로</button>`:''}`:'원'}</span></div>`;
   $('start').value=S.start||'';
   $('startnote').textContent=S.start?'1일째·2일째… 기록마다 그 날 환율을 써요':'넣으면 기록마다 그 날 환율을 자동으로 써요';
   const usedCur=new Set([S.cur,...S.items.map(it=>it.cur)]);
