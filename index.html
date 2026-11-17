@@ -198,7 +198,8 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 
 <section>
   <h2><i>05</i>환율 <small>1단위 = 몇 원</small></h2>
-  <p class="muted" style="margin-top:0">환율은 날마다 바뀌어요. 기록할 때 <b>실제 빠져나간 원화</b>를 적은 항목은 그 금액 그대로, 안 적은 항목만 아래 환율과 수수료로 어림해요. 현금 항목엔 수수료를 붙이지 않으니, 환전할 때 받은 환율을 넣으면 돼요.</p>
+  <p class="muted" style="margin-top:0"><b>실제 빠져나간 원화</b>를 적은 기록은 그 금액 그대로 써요. 안 적은 기록은 환율과 카드 수수료로 어림해요(현금은 수수료 없음).<br><b>여행 첫날</b>을 넣으면 기록마다 그 날 환율을 자동으로 쓰고, 아래 환율을 직접 고치거나 지난 환율을 누르면 그 통화는 그 값으로 고정돼요.</p>
+  <div class="rate" style="margin-bottom:8px"><span>첫날</span><input type="date" id="start" aria-label="여행 첫날" style="width:auto"><span class="muted" id="startnote"></span></div>
   <div class="rate"><span>카드</span><input type="number" step="any" min="0" id="fee" aria-label="카드 수수료"><span class="muted">% 수수료 (보통 1~2.5%)</span></div>
   <div id="rates"></div>
   <details class="more"><summary>다른 통화 환율</summary><div id="rates2"></div></details>
@@ -218,9 +219,19 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 // ── 계산 부분 (DOM 없이 동작: 중간작업/settle_test.js 가 이 부분을 시험) ──
 const DEFAULT_RATES={KRW:1,JPY:8.37,USD:1335,EUR:1471,CNY:199.7,TWD:40.5,THB:39.4,VND:0.0519,HKD:170.2,SGD:1036,PHP:20.89}; // 2026-11-17 기준값, 앱에서 다시 불러올 수 있음
 const CATS={food:'식비',move:'교통',stay:'숙소',see:'관광',shop:'쇼핑',etc:'기타'};
+// 여행 첫날 + (며칠째-1) = 그 기록의 날짜
+function itemDate(it,s){if(!s.start)return'';const d=new Date(s.start+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+(it.day||1)-1);return d.toISOString().slice(0,10)}
+// 그 기록에 쓸 환율: 직접 고친 통화는 고친 값, 아니면 그 날(주말·공휴일이면 바로 전 영업일) 환율, 없으면 기본값
+function rateFor(it,s){
+  const c=it.cur,base=s.rates[c]??0;
+  if(c==='KRW'||!s.start||s.manual?.[c]||!s.dayRates)return{rate:base,date:''};
+  const d=itemDate(it,s);let best='';
+  for(const k in s.dayRates)if(k<=d&&k>best&&s.dayRates[k][c])best=k;
+  return best?{rate:s.dayRates[best][c],date:best}:{rate:base,date:''};
+}
 function itemWon(it,s){
   if(it.krw>0)return it.krw; // 카드 문자·환전 영수증의 실제 원화가 가장 정확
-  const w=it.amt*(s.rates[it.cur]??0);
+  const w=it.amt*rateFor(it,s).rate;
   return it.cur==='KRW'||it.cash?w:w*(1+(s.fee||0)/100); // 현금은 환전 환율에 이미 비용이 들어 있음
 }
 function shares(it){ // 사람별 몫 비율 {이름:비율}, 합 1
@@ -264,7 +275,7 @@ function settle(s){
 if(typeof document!=='undefined'){
 const $=id=>document.getElementById(id);
 const won=n=>Math.round(n).toLocaleString('ko-KR')+'원';
-const blank=()=>({title:'',people:[],items:[],rates:{...DEFAULT_RATES},cur:'JPY',fee:0,done:[],day:1});
+const blank=()=>({title:'',people:[],items:[],rates:{...DEFAULT_RATES},cur:'JPY',fee:0,done:[],day:1,start:'',manual:{},dayRates:{}});
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let store={cur:'t1',list:{}};
 let S=load(),mode='spend',W={},cat='food',editing=-1;
@@ -285,8 +296,15 @@ function clean(s){
     if(it.w&&typeof it.w==='object'){o.w={};for(const p of o.among)if(+it.w[p]>=0)o.w[p]=+it.w[p]}
     return o.among.length?o:null}).filter(Boolean).slice(0,500);
   return{...b,title:str(s.title,24),people,items,rates,cur:rates[s.cur]?s.cur:'JPY',fee:+s.fee>=0&&+s.fee<20?+s.fee:0,
-    done:Array.isArray(s.done)?s.done.filter(x=>typeof x==='string').slice(0,50):[],day:Math.max(1,Math.min(30,+s.day||1))};
+    done:Array.isArray(s.done)?s.done.filter(x=>typeof x==='string').slice(0,50):[],day:Math.max(1,Math.min(30,+s.day||1)),
+    start:typeof s.start==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s.start)?s.start:'',
+    manual:Object.fromEntries(Object.keys(s.manual&&typeof s.manual==='object'?s.manual:{}).filter(c=>/^[A-Z]{3}$/.test(c)&&s.manual[c]).map(c=>[c,true])),
+    dayRates:cleanDayRates(s.dayRates)};
 }
+function cleanDayRates(o){const out={};if(!o||typeof o!=='object')return out;
+  for(const d of Object.keys(o).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)).sort().slice(-60)){const v={};
+    for(const c in o[d])if(/^[A-Z]{3}$/.test(c)&&+o[d][c]>0)v[c]=+o[d][c];if(Object.keys(v).length)out[d]=v}
+  return out}
 // 저장소: {cur:id, list:{id:여행}} — 기기 브라우저에만 저장
 const newId=()=>'t'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
 function load(){
@@ -335,7 +353,7 @@ function renderForm(){
 }
 
 function render(){
-  save();renderTrips();
+  save();renderTrips();setTimeout(()=>ensureDayRates&&ensureDayRates(),0);
   $('title').value=S.title;document.title=S.title||'여행 정산';
   $('demo').hidden=S.people.length>0||S.items.length>0;
   $('people').innerHTML=S.people.map((p,i)=>`<span class="chip del">${esc(p)}<button class="x" data-del="${i}" aria-label="${esc(p)} 빼기">✕</button></span>`).join('')||'<span class="muted">2명 이상 넣어 주세요.</span>';
@@ -349,12 +367,16 @@ function render(){
   $('items').innerHTML=S.items.length?days.map(d=>{
     const list=S.items.map((it,i)=>[it,i]).filter(([it])=>(it.day||1)===d).reverse();
     const sum=list.filter(([it])=>it.type!=='tr').reduce((a,[it])=>a+itemWon(it,S),0);
-    return `<div class="day"><span>${d}일째</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
+    const dd=itemDate({day:d},S);
+    return `<div class="day"><span>${d}일째${dd?` · ${dd.slice(5).replace('-','. ')}.`:''}</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
       ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div><span class="cat">건넴</span>${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'건넨 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
       :`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(it.payer)} ${it.cash?'현금':'결제'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')} 몫</div></div>
-        <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'실제 ':'≈ '}${won(itemWon(it,S))}</div>`}</div></div>`).join('')}).join('')
+        <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'실제 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span title="이 날 환율로 계산">(${rateFor(it,S).date.slice(5).replace('-','/')})</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
-  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" value="${r}" data-rate="${c}" aria-label="${c} 환율"><span class="muted">원</span></div>`;
+  const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
+  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" value="${r}" data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?'원 · <b>날짜별 자동</b> (고치면 이 값으로 고정)':S.manual[c]?`원 · 직접 고정 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별 자동으로</button>`:''}`:'원'}</span></div>`;
+  $('start').value=S.start||'';
+  $('startnote').textContent=S.start?'1일째·2일째… 기록마다 그 날 환율을 써요':'넣으면 기록마다 그 날 환율을 자동으로 써요';
   const usedCur=new Set([S.cur,...S.items.map(it=>it.cur)]);
   const rs=Object.entries(S.rates).filter(([c])=>c!=='KRW');
   $('rates').innerHTML=rs.filter(([c])=>usedCur.has(c)).map(rateRow).join('');
@@ -435,12 +457,14 @@ $('edel').onclick=()=>{if(editing<0)return;const it=S.items.splice(editing,1)[0]
   toast(`지웠어요: ${it.t||'기록'}`)};
 $('result').onchange=e=>{const k=e.target.dataset.tx;if(!k)return;
   e.target.checked?S.done.push(k):S.done=S.done.filter(x=>x!==k);render()};
-$('rates').onchange=$('rates2').onchange=e=>{const c=e.target.dataset.rate,v=parseFloat(e.target.value);if(c&&v>0){S.rates[c]=v;render()}};
+$('rates').onchange=$('rates2').onchange=e=>{const c=e.target.dataset.rate,v=parseFloat(e.target.value);if(c&&v>0){S.rates[c]=v;S.manual[c]=true;render()}};
+$('rates').onclick=$('rates2').onclick=e=>{const c=e.target.dataset.auto;if(c){delete S.manual[c];render();toast(`${c}는 다시 날짜별 자동이에요`)}};
+$('start').onchange=e=>{S.start=/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)?e.target.value:'';render()};
 $('fee').onchange=e=>{const v=parseFloat(e.target.value);S.fee=v>=0&&v<20?v:0;render()};
 $('fetch').onclick=async()=>{$('rnote').textContent='불러오는 중…';
   try{const j=await(await fetch('https://open.er-api.com/v6/latest/KRW')).json();
     if(!j.rates)throw 0;
-    for(const c in S.rates)if(c!=='KRW'&&j.rates[c])S.rates[c]=+(1/j.rates[c]).toPrecision(4);
+    for(const c in S.rates)if(c!=='KRW'&&j.rates[c]){S.rates[c]=+(1/j.rates[c]).toPrecision(4);if(S.start)S.manual[c]=true}
     render();$('rnote').textContent=`${new Date(j.time_last_update_unix*1000).toLocaleDateString('ko-KR')} 기준`}
   catch(e){$('rnote').textContent='못 불러왔어요. 직접 고쳐 주세요.'}};
 // 지난 환율: 최근 3주 표 또는 고른 날짜 → 줄을 누르면 그 날 환율로 바꿈
@@ -462,10 +486,26 @@ function renderHist(){if(!hist)return;
   $('hlist').innerHTML=`<table class="htab"><tr><th>날짜</th>${hist.cs.map(c=>`<th>${c}</th>`).join('')}</tr>`+
     ds.map(d=>`<tr data-d="${d}" class="${d===histOn?'on':''}"><td class="num">${d.slice(5).replace('-','. ')}.</td>${hist.cs.map(c=>`<td class="num">${f(d,c)}</td>`).join('')}</tr>`).join('')+'</table>';
 }
+let drKey='';
+async function ensureDayRates(){
+  if(!S.start)return;
+  const cs=[...new Set(S.items.filter(it=>it.cur!=='KRW'&&!it.krw).map(it=>it.cur))].filter(c=>HIST_CUR.includes(c)&&!S.manual[c]);
+  if(!cs.length)return;
+  const today=ymd(new Date()),days=S.items.map(it=>itemDate(it,S)).filter(d=>d<=today);
+  if(!days.length)return; // 아직 안 온 날짜는 기본값
+  const last=days.sort().at(-1),from=ymd(new Date(new Date(S.start+'T00:00:00Z')-7*864e5));
+  const have=c=>Object.keys(S.dayRates).some(k=>k<=S.start&&S.dayRates[k][c])&&Object.keys(S.dayRates).some(k=>k>=ymd(new Date(new Date(last+'T00:00:00Z')-4*864e5))&&S.dayRates[k][c]);
+  const need=cs.filter(c=>!have(c));if(!need.length)return;
+  const key=from+last+need.join();if(key===drKey)return;drKey=key;
+  try{const j=await(await fetch(`https://api.frankfurter.dev/v1/${from}..${last}?from=KRW&to=${need.join(',')}`)).json();
+    for(const d in j.rates||{}){S.dayRates[d]??={};for(const c in j.rates[d])S.dayRates[d][c]=+(1/j.rates[d][c]).toPrecision(4)}
+    S.dayRates=cleanDayRates(S.dayRates);render();
+  }catch(e){drKey=''}
+}
 $('hist').onclick=()=>{const t=new Date();loadHist(ymd(new Date(t-21*864e5)),ymd(t))};
 $('hdate').onchange=e=>{if(e.target.value)loadHist(e.target.value)};
 $('hlist').onclick=e=>{const tr=e.target.closest('tr[data-d]');if(!tr)return;const d=tr.dataset.d;
-  for(const c of hist.cs){const v=hist.rows[d][c];if(v)S.rates[c]=+(1/v).toPrecision(4)}
+  for(const c of hist.cs){const v=hist.rows[d][c];if(v){S.rates[c]=+(1/v).toPrecision(4);S.manual[c]=true}}
   histOn=d;render();renderHist();$('rnote').textContent=`${d.slice(5).replace('-','. ')}. 환율 적용`;toast(`${d} 환율로 바꿨어요`)};
 
 function text(){const {tx}=settle(S),T=total(),bc={};
@@ -542,7 +582,7 @@ $('img').onclick=()=>{
     if(navigator.canShare({files:[f]}))await navigator.share({files:[f],title:S.title||'여행 정산'});else toast('이 브라우저는 이미지 보내기를 못 해요')}catch(e){}};
 };
 
-const DEMO=()=>{const all=['민지','준호','서연','도윤'];return{...blank(),title:'도쿄 3박 4일',fee:1.5,day:3,people:all,items:[
+const DEMO=()=>{const all=['민지','준호','서연','도윤'];return{...blank(),title:'도쿄 3박 4일',fee:1.5,day:3,start:new Date(Date.now()-12*864e5).toISOString().slice(0,10),people:all,items:[
   {t:'공항 리무진',amt:5600,cur:'JPY',krw:52890,payer:'준호',among:all,cat:'move',day:1},
   {t:'첫날 저녁 라멘',amt:4800,cur:'JPY',payer:'민지',among:all,cat:'food',day:1},
   {t:'숙소 3박',amt:620000,cur:'KRW',payer:'서연',among:all,cat:'stay',day:1},
