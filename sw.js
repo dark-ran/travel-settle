@@ -1,5 +1,5 @@
 // 오프라인용: 먼저 네트워크, 안 되면 저장본 (새 버전이 바로 반영되게)
-const C='settle-v7',FILES=['./','index.html','manifest.json','icon.svg'];
+const C='settle-v8',FILES=['./','index.html','manifest.json','icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k))))));
 self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(e.request.method!=='GET'||u.origin!==location.origin)return;
