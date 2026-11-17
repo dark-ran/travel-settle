@@ -377,7 +377,7 @@ function render(){
   const lastAuto=c=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return ks.length?`자동 ${S.dayRates[ks.at(-1)][c]}`:'불러오는 중'}; // 자동일 땐 마지막 날 환율을 흐리게
   const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?'원 · <b>날짜별 자동</b> (고치면 이 값으로 고정)':S.manual[c]?`원 · 직접 고정 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별 자동으로</button>`:''}`:'원'}</span></div>`;
   $('start').value=S.start||'';
-  $('startnote').textContent=S.start?'1일째·2일째… 기록마다 그 날 환율을 써요':'넣으면 기록마다 그 날 환율을 자동으로 써요';
+  $('startnote').textContent=S.start?'날짜별 환율 사용 중':'넣으면 날짜별 환율 자동';
   const usedCur=new Set([S.cur,...S.items.map(it=>it.cur)]);
   const rs=Object.entries(S.rates).filter(([c])=>c!=='KRW');
   $('rates').innerHTML=rs.filter(([c])=>usedCur.has(c)).map(rateRow).join('');
