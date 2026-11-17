@@ -497,8 +497,8 @@ $('img').onclick=()=>{
   y+=40;line(y);y+=60;g.fillStyle=INK;g.font=`700 30px ${F}`;g.fillText('어디에 썼나',X0,y);
   for(const [k,v] of cats){y+=58;lr(`${CATS[k]}  ${T?Math.round(v/T*100):0}%`,won(v),y,`400 30px ${F}`,`400 30px ${M}`)}
   g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산 · dark-ran.github.io/travel-settle',W2/2,zy-40);g.textAlign='left';
-  if(allDone){g.save();g.translate(X1-120,300);g.rotate(-0.19);g.strokeStyle=RED;g.fillStyle=RED;g.globalAlpha=.85;g.lineWidth=6;
-    g.strokeRect(-110,-60,220,120);g.font=`700 44px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,16);g.restore()}
+  if(allDone){g.save();g.translate(X1-95,140);g.rotate(-0.19);g.strokeStyle=RED;g.fillStyle=RED;g.globalAlpha=.85;g.lineWidth=6;
+    g.strokeRect(-95,-48,190,96);g.font=`700 38px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,13);g.restore()}
   const src=c.toDataURL('image/png'),name=(S.title||'여행정산')+'.png';
   const m=document.createElement('div');m.id='modal';
   m.innerHTML=`<img alt="정산 결과 이미지"><p>저장이 안 되면 이미지를 <b>길게 눌러</b> 저장하세요</p><div class="row"><button id="msave">저장</button>${navigator.canShare?'<button id="mshare" class="ghost" style="color:#fff">보내기</button>':''}<button id="mclose" class="ghost" style="color:#fff">닫기</button></div>`;
