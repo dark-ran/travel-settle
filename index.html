@@ -124,6 +124,12 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 #modal p{color:#f3efe5;margin:0;text-align:center;font-size:14px}
 #modal button.ghost{color:#f3efe5;border-color:#f3efe5}
 #modal button:not(.ghost){background:#f3efe5;color:#1c1b19;border-color:#f3efe5}
+.htab{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+.htab th,.htab td{padding:7px 4px;text-align:right;border-bottom:1px dotted var(--rule)}
+.htab th:first-child,.htab td:first-child{text-align:left}
+.htab th{color:var(--sub);font-weight:500;border-bottom:1px solid var(--ink)}
+.htab tr[data-d]{cursor:pointer}.htab tr[data-d]:hover{background:var(--soft)}
+.htab tr.on{background:var(--soft);box-shadow:inset 3px 0 var(--red)}
 .dlg{position:fixed;inset:0;background:rgba(20,18,15,.6);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
 .dlg>div{background:var(--paper);color:var(--ink);padding:18px;max-width:380px;width:100%;border-radius:2px}
 .dlg p{margin:0 0 14px;white-space:pre-line}
@@ -197,7 +203,10 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
   <div id="rates"></div>
   <details class="more"><summary>다른 통화 환율</summary><div id="rates2"></div></details>
   <div class="row" style="margin-top:8px"><button class="ghost" id="fetch">오늘 환율 불러오기</button><span class="muted" id="rnote">기본값: 2026. 11. 17. 기준</span></div>
-  <p class="muted" style="margin:6px 0 0"><a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" style="color:inherit">Rates By Exchange Rate API</a></p>
+  <div class="row" style="margin-top:8px"><button class="ghost" id="hist">지난 환율 보기</button><input type="date" id="hdate" aria-label="날짜로 환율 찾기" style="width:auto;flex:1;max-width:170px"></div>
+  <div id="hlist"></div>
+  <p class="muted" style="margin:8px 0 0">여행한 날의 환율을 누르면 그 환율로 바뀌어요. 실제 원화를 적은 기록은 영향이 없어요.<br>
+  오늘 환율: <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" style="color:inherit">Rates By Exchange Rate API</a> · 지난 환율: <a href="https://frankfurter.dev" target="_blank" rel="noopener" style="color:inherit">Frankfurter</a>(유럽중앙은행 기준, 주말·공휴일은 없음, 대만 달러·베트남 동은 없음)</p>
 </section>
 
 <p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용(이름·금액)이 담기니 정산할 사람에게만 보내세요.
@@ -434,6 +443,30 @@ $('fetch').onclick=async()=>{$('rnote').textContent='불러오는 중…';
     for(const c in S.rates)if(c!=='KRW'&&j.rates[c])S.rates[c]=+(1/j.rates[c]).toPrecision(4);
     render();$('rnote').textContent=`${new Date(j.time_last_update_unix*1000).toLocaleDateString('ko-KR')} 기준`}
   catch(e){$('rnote').textContent='못 불러왔어요. 직접 고쳐 주세요.'}};
+// 지난 환율: 최근 3주 표 또는 고른 날짜 → 줄을 누르면 그 날 환율로 바꿈
+const HIST_CUR=['JPY','USD','EUR','CNY','THB','HKD','SGD','PHP'];
+let hist=null,histOn='';
+const ymd=d=>d.toISOString().slice(0,10);
+async function loadHist(from,to){
+  const used=[...new Set([S.cur,...S.items.map(it=>it.cur)])].filter(c=>c!=='KRW');
+  const cs=(used.length?used:['JPY','USD']).filter(c=>HIST_CUR.includes(c));
+  if(!cs.length)return $('hlist').innerHTML='<p class="muted">쓰는 통화(대만 달러·베트남 동)는 지난 환율이 없어요. 직접 고쳐 주세요.</p>';
+  $('hlist').innerHTML='<p class="muted">불러오는 중…</p>';
+  try{const j=await(await fetch(`https://api.frankfurter.dev/v1/${from}${to?'..'+to:''}?from=KRW&to=${cs.join(',')}`)).json();
+    const rows=j.rates&&!j.rates[cs[0]]?j.rates:{[j.date]:j.rates}; // 기간이면 날짜별, 하루면 그 날 하나
+    hist={cs,rows};renderHist();
+  }catch(e){$('hlist').innerHTML='<p class="muted">못 불러왔어요. 잠시 뒤 다시 눌러 주세요.</p>'}
+}
+function renderHist(){if(!hist)return;
+  const ds=Object.keys(hist.rows).sort().reverse(),f=(d,c)=>hist.rows[d][c]?(+(1/hist.rows[d][c]).toPrecision(4)).toLocaleString('ko-KR'):'—';
+  $('hlist').innerHTML=`<table class="htab"><tr><th>날짜</th>${hist.cs.map(c=>`<th>${c}</th>`).join('')}</tr>`+
+    ds.map(d=>`<tr data-d="${d}" class="${d===histOn?'on':''}"><td class="num">${d.slice(5).replace('-','. ')}.</td>${hist.cs.map(c=>`<td class="num">${f(d,c)}</td>`).join('')}</tr>`).join('')+'</table>';
+}
+$('hist').onclick=()=>{const t=new Date();loadHist(ymd(new Date(t-21*864e5)),ymd(t))};
+$('hdate').onchange=e=>{if(e.target.value)loadHist(e.target.value)};
+$('hlist').onclick=e=>{const tr=e.target.closest('tr[data-d]');if(!tr)return;const d=tr.dataset.d;
+  for(const c of hist.cs){const v=hist.rows[d][c];if(v)S.rates[c]=+(1/v).toPrecision(4)}
+  histOn=d;render();renderHist();$('rnote').textContent=`${d.slice(5).replace('-','. ')}. 환율 적용`;toast(`${d} 환율로 바꿨어요`)};
 
 function text(){const {tx}=settle(S),T=total(),bc={};
   S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
