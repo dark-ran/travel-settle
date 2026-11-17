@@ -19,11 +19,26 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231c1b19'/%3E%3Cpath d='M16 10h32v40l-4-3-4 3-4-3-4 3-4-3-4 3-4-3-4 3z' fill='%23fffdf7'/%3E%3Cpath d='M22 20h20M22 27h20M22 34h12' stroke='%231c1b19' stroke-width='3'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#e8e4da;--paper:#fffdf7;--ink:#1c1b19;--sub:#6e685d;--line:#e3dccd;--rule:#bdb4a2;--red:#c8371d;--soft:#f3efe5}
-@media (prefers-color-scheme:dark){:root{--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}}
+:root{--font:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;--bg:#e8e4da;--paper:#fffdf7;--ink:#1c1b19;--sub:#6e685d;--line:#e3dccd;--rule:#bdb4a2;--red:#c8371d;--soft:#f3efe5}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}}
+:root[data-theme=white]{--bg:#f1f1ef;--paper:#fff;--ink:#111;--sub:#6b6b6b;--line:#e6e6e6;--rule:#bdbdbd;--red:#e0301e;--soft:#f5f5f4}
+:root[data-theme=night]{--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}
+:root[data-theme=blue]{--bg:#dfe5ee;--paper:#fbfcfe;--ink:#1d3a8a;--sub:#5b6b8c;--line:#dfe5f0;--rule:#a9b6d0;--red:#d9452b;--soft:#eef2f9}
+:root[data-theme=pink]{--bg:#f4dfe3;--paper:#fffafa;--ink:#4a2330;--sub:#8c6670;--line:#f1dfe3;--rule:#d6b3bc;--red:#d63f6c;--soft:#fbeef1}
+:root[data-theme=green]{--bg:#d9e2d3;--paper:#fbfdf8;--ink:#20372a;--sub:#5f7365;--line:#e1e9dc;--rule:#a7b8a3;--red:#c0562b;--soft:#eef4ea}
+:root[data-font=myeongjo]{--font:"Gowun Batang","Nanum Myeongjo",serif}
+:root[data-font=hand]{--font:"Gaegu","Nanum Pen Script",cursive}
+.look{margin:-6px 0 12px}
+.look summary{list-style:none;cursor:pointer;font-size:12.5px;color:var(--sub);display:inline-block;text-decoration:underline;text-underline-offset:3px}
+.look summary::-webkit-details-marker{display:none}
+.lookp{background:var(--paper);padding:12px 14px;margin-top:8px;border-radius:2px}
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
+.sw button{width:auto;display:flex;align-items:center;gap:6px;background:transparent;color:var(--ink);border:1px solid var(--rule);padding:5px 9px 5px 5px;font-weight:400;font-size:13px}
+.sw button i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.15);display:block}
+.sw button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);font-weight:600}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 "IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 var(--font);-webkit-font-smoothing:antialiased}
 .num,.mono,input[type=number]{font-family:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;font-variant-numeric:tabular-nums}
 .num{white-space:nowrap}
 main{max-width:540px;margin:0 auto;padding:22px 16px 80px}
@@ -42,7 +57,7 @@ input,select,button,textarea{font:inherit;color:inherit}
 input,select{background:transparent;border:0;border-bottom:1px solid var(--rule);border-radius:0;padding:8px 2px;min-width:0;width:100%;outline:0}
 input:focus,select:focus{border-bottom-color:var(--ink)}
 input::placeholder{color:var(--sub);opacity:.8}
-input[type=number]::placeholder{font-family:"IBM Plex Sans KR",system-ui,sans-serif}
+input[type=number]::placeholder{font-family:var(--font)}
 select{appearance:none;background:linear-gradient(45deg,transparent 50%,var(--sub) 50%) right 6px center/5px 5px no-repeat,linear-gradient(-45deg,transparent 50%,var(--sub) 50%) right 1px center/5px 5px no-repeat;padding-right:16px}
 select option{background:var(--paper);color:var(--ink)}
 input[type=checkbox]{appearance:none;width:17px;height:17px;padding:0;border:1.5px solid var(--ink);border-radius:2px;flex:none;display:inline-grid;place-content:center;margin:0;cursor:pointer}
@@ -115,6 +130,10 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 <body>
 <main>
 <h1 class="brand">여행 정산 <span>로그인 없이 · 무료</span></h1>
+<details class="look"><summary>색·글꼴 바꾸기</summary><div class="lookp">
+  <div class="muted">색</div><div class="sw" id="themes"></div>
+  <div class="muted">글꼴</div><div class="sw" id="fonts"></div>
+</div></details>
 <div class="trips"><select id="trips" aria-label="여행 고르기"></select><button class="ghost" id="newtrip">+ 새 여행</button></div>
 <input id="title" aria-label="여행 이름" maxlength="24" placeholder="여행 이름 (예: 도쿄 3박 4일)">
 <p class="tag">누가 얼마 냈는지만 적으면, <b>누가 누구에게 얼마 보내면 끝인지</b> 바로 알려 줘요. 엔화·달러가 섞여도, 몇 명만 나눠도, 회비를 걷었어도 돼요.</p>
@@ -440,15 +459,16 @@ $('share').onclick=async()=>{const url=baseUrl()+'?d='+await pack(S);
 // 결과 카드 이미지 (단톡방에 올리기 좋게 세로형)
 $('img').onclick=()=>{
   if(!S.items.length||S.people.length<2)return toast('기록이 없어요');
-  const {tx}=settle(S),T=total(),W2=1080,F='"IBM Plex Sans KR",system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif',M='"IBM Plex Mono",ui-monospace,monospace';
+  const {tx}=settle(S),T=total(),W2=1080,F=getComputedStyle(document.body).fontFamily,M='"IBM Plex Mono",ui-monospace,monospace';
   const bc={};S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
   const cats=Object.entries(bc).sort((a,b)=>b[1]-a[1]),allDone=!tx.length||tx.every(t=>S.done.includes(txKey(t)));
   const H=640+Math.max(tx.length,1)*80+cats.length*58+220;
   const c=document.createElement('canvas');c.width=W2;c.height=H;const g=c.getContext('2d');
-  const X0=110,X1=W2-110,INK='#1c1b19',SUB='#6e685d',RULE='#bdb4a2';
-  g.fillStyle='#e8e4da';g.fillRect(0,0,W2,H);
+  const cs=getComputedStyle(document.documentElement),V=k=>cs.getPropertyValue(k).trim();
+  const X0=110,X1=W2-110,INK=V('--ink'),SUB=V('--sub'),RULE=V('--rule'),RED=V('--red');
+  g.fillStyle=V('--bg');g.fillRect(0,0,W2,H);
   // 종이 + 아래 톱니
-  g.fillStyle='#fffdf7';g.beginPath();g.moveTo(70,60);g.lineTo(W2-70,60);let zy=H-90;g.lineTo(W2-70,zy);
+  g.fillStyle=V('--paper');g.beginPath();g.moveTo(70,60);g.lineTo(W2-70,60);let zy=H-90;g.lineTo(W2-70,zy);
   for(let x=W2-70;x>70;x-=20){g.lineTo(x-10,zy+12);g.lineTo(x-20,zy)}g.closePath();g.fill();
   const line=(y,dash)=>{g.strokeStyle=RULE;g.lineWidth=2;g.setLineDash(dash||[8,7]);g.beginPath();g.moveTo(X0,y);g.lineTo(X1,y);g.stroke();g.setLineDash([])};
   const lr=(l,r,y,f1,f2,col)=>{g.fillStyle=col||INK;g.font=f1;g.textAlign='left';g.fillText(l,X0,y);g.font=f2||f1;g.textAlign='right';g.fillText(r,X1,y);g.textAlign='left'};
@@ -466,7 +486,7 @@ $('img').onclick=()=>{
   y+=40;line(y);y+=60;g.fillStyle=INK;g.font=`700 30px ${F}`;g.fillText('어디에 썼나',X0,y);
   for(const [k,v] of cats){y+=58;lr(`${CATS[k]}  ${T?Math.round(v/T*100):0}%`,won(v),y,`400 30px ${F}`,`400 30px ${M}`)}
   g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산 · dark-ran.github.io/travel-settle',W2/2,zy-40);g.textAlign='left';
-  if(allDone){g.save();g.translate(X1-120,300);g.rotate(-0.19);g.strokeStyle='#c8371d';g.fillStyle='#c8371d';g.globalAlpha=.85;g.lineWidth=6;
+  if(allDone){g.save();g.translate(X1-120,300);g.rotate(-0.19);g.strokeStyle=RED;g.fillStyle=RED;g.globalAlpha=.85;g.lineWidth=6;
     g.strokeRect(-110,-60,220,120);g.font=`700 44px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,16);g.restore()}
   const src=c.toDataURL('image/png'),name=(S.title||'여행정산')+'.png';
   const m=document.createElement('div');m.id='modal';
@@ -490,6 +510,25 @@ const DEMO=()=>{const all=['민지','준호','서연','도윤'];return{...blank(
 $('demo').onclick=()=>{S=DEMO();resetForm();render();$('result').scrollIntoView({behavior:'smooth'});toast('예시예요. 기록을 눌러 고쳐 보세요. 내 여행은 ＋ 새 여행')};
 $('reset').onclick=()=>{if(!confirm(`'${S.title||'이름 없는 여행'}'을(를) 지울까요? 되돌릴 수 없어요.`))return;
   delete store.list[store.cur];store.cur=Object.keys(store.list)[0]||newId();store.list[store.cur]??=blank();S=store.list[store.cur];resetForm();setMode('spend');render()};
+// ── 색·글꼴 (이 기기에만 저장) ──
+const THEMES={'':['영수증','#e8e4da','#1c1b19'],white:['하얀 종이','#ffffff','#111111'],night:['밤','#22201c','#ece6d8'],blue:['파란 잉크','#fbfcfe','#1d3a8a'],pink:['벚꽃','#f4dfe3','#4a2330'],green:['숲','#d9e2d3','#20372a']};
+const FONTS={'':['고딕',''],myeongjo:['명조','Gowun+Batang:wght@400;700'],hand:['손글씨','Gaegu:wght@400;700']};
+let look={theme:'',font:''};try{look={...look,...JSON.parse(localStorage.getItem('trip-settle-look')||'{}')}}catch(e){}
+function applyLook(){
+  if(!THEMES[look.theme])look.theme='';if(!FONTS[look.font])look.font='';
+  const de=document.documentElement;
+  look.theme?de.dataset.theme=look.theme:delete de.dataset.theme;
+  look.font?de.dataset.font=look.font:delete de.dataset.font;
+  const f=FONTS[look.font][1];
+  if(f&&!document.querySelector(`link[data-f="${look.font}"]`)){const l=document.createElement('link');l.rel='stylesheet';l.dataset.f=look.font;l.href=`https://fonts.googleapis.com/css2?family=${f}&display=swap`;document.head.append(l)}
+  document.querySelector('meta[name=theme-color]').content=getComputedStyle(de).getPropertyValue('--ink').trim();
+  $('themes').innerHTML=Object.entries(THEMES).map(([k,[n,a,b]])=>`<button type="button" data-th="${k}" class="${k===look.theme?'on':''}"><i style="background:linear-gradient(135deg,${a} 50%,${b} 50%)"></i>${n}</button>`).join('');
+  $('fonts').innerHTML=Object.entries(FONTS).map(([k,[n]])=>`<button type="button" data-fo="${k}" class="${k===look.font?'on':''}" style="padding-left:9px;font-family:${k==='myeongjo'?'Gowun Batang,serif':k==='hand'?'Gaegu,cursive':'inherit'}">${n}</button>`).join('');
+  try{localStorage.setItem('trip-settle-look',JSON.stringify(look))}catch(e){}
+}
+$('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b.dataset.th;applyLook()}};
+$('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
+applyLook();
 resetForm();setMode('spend');render();
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
 (async()=>{
