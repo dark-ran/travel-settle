@@ -522,7 +522,7 @@ $('demo').onclick=()=>{S=DEMO();resetForm();render();$('result').scrollIntoView(
 $('reset').onclick=async()=>{if(!await ask(`'${S.title||'이름 없는 여행'}'을(를) 지울까요? 되돌릴 수 없어요.`,'지우기'))return;
   delete store.list[store.cur];store.cur=Object.keys(store.list)[0]||newId();store.list[store.cur]??=blank();S=store.list[store.cur];resetForm();setMode('spend');render()};
 // ── 색·글꼴 (이 기기에만 저장) ──
-const THEMES={'':['영수증','#e8e4da','#1c1b19'],white:['하얀 종이','#ffffff','#111111'],night:['밤','#22201c','#ece6d8'],blue:['파란 잉크','#fbfcfe','#1d3a8a'],pink:['벚꽃','#f4dfe3','#4a2330'],green:['숲','#d9e2d3','#20372a']};
+const THEMES={'':['자동','#e8e4da','#22201c'],receipt:['영수증','#e8e4da','#1c1b19'],white:['하얀 종이','#ffffff','#111111'],night:['밤','#22201c','#ece6d8'],blue:['파란 잉크','#fbfcfe','#1d3a8a'],pink:['벚꽃','#f4dfe3','#4a2330'],green:['숲','#d9e2d3','#20372a']};
 const FONTS={'':['고딕',''],myeongjo:['명조','Gowun+Batang:wght@400;700'],hand:['손글씨','Gaegu:wght@400;700']};
 let look={theme:'',font:''};try{look={...look,...JSON.parse(localStorage.getItem('trip-settle-look')||'{}')}}catch(e){}
 function applyLook(){
