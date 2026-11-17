@@ -145,7 +145,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:14px;margin:6px 0
   <div class="row" style="margin-top:8px"><button class="ghost" id="fetch">오늘 환율 불러오기</button><span class="muted" id="rnote">기본값: 2026. 11. 17. 기준</span></div>
 </section>
 
-<p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용만 담겨요.
+<p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용(이름·금액)이 담기니 정산할 사람에게만 보내세요.
 <button class="x" id="reset">이 여행 지우기</button></p>
 </main>
 <div id="toast" role="status"></div>
@@ -229,7 +229,6 @@ function load(){
   try{const st=JSON.parse(localStorage.getItem('trip-settle-v2'));
     if(st&&st.list&&typeof st.list==='object'){for(const k in st.list)store.list[k]=clean(st.list[k]);store.cur=st.cur in store.list?st.cur:Object.keys(store.list)[0]||'t1'}}catch(e){}
   if(!Object.keys(store.list).length){try{const s=localStorage.getItem('trip-settle');if(s)store.list.t1=clean(JSON.parse(s))}catch(e){}}
-  if(location.hash.length>1){try{const s=clean(JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(1))))));const id=newId();store.list[id]=s;store.cur=id}catch(e){}}
   if(!store.list[store.cur])store.list[store.cur]=blank();
   return store.list[store.cur];
 }
@@ -383,7 +382,23 @@ function text(){const {tx}=settle(S),T=total(),bc={};
     `\n\n💸 보낼 돈\n`+(tx.length?tx.map(t=>`${t.from} → ${t.to} ${won(t.won)}`).join('\n'):'없음 (딱 맞게 냄)')}
 async function copy(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){prompt('아래 내용을 복사하세요',t)}}
 $('copy').onclick=()=>S.items.length&&S.people.length>1?copy(text(),'복사했어요. 카톡에 붙여 넣으세요'):toast('기록이 없어요');
-$('share').onclick=async()=>{const url=location.href.split('#')[0]+'#'+btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+const b64u=b=>{let s='';for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode(...b.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64u=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+const pipe=(bytes,ts)=>new Response(new Blob([bytes]).stream().pipeThrough(ts)).arrayBuffer().then(b=>new Uint8Array(b));
+async function pack(s){
+  const used=new Set(s.items.map(it=>it.cur));const rates={};for(const c of used)rates[c]=s.rates[c]; // 쓴 통화만 담아 링크를 짧게
+  const raw=new TextEncoder().encode(JSON.stringify({...s,rates,done:[]}));
+  if(window.CompressionStream){try{return 'z'+b64u(await pipe(raw,new CompressionStream('deflate-raw')))}catch(e){}}
+  return 'j'+b64u(raw);
+}
+async function unpack(d){
+  const b=unb64u(d.slice(1));
+  if(d[0]==='z')return JSON.parse(new TextDecoder().decode(await pipe(b,new DecompressionStream('deflate-raw'))));
+  if(d[0]==='j')return JSON.parse(new TextDecoder().decode(b));
+  throw new Error('형식 오류');
+}
+const baseUrl=()=>location.origin+location.pathname;
+$('share').onclick=async()=>{const url=baseUrl()+'?d='+await pack(S);
   if(navigator.share&&/^https?:/.test(location.href)){try{await navigator.share({title:S.title||'여행 정산',text:'정산 내용이에요. 열어서 이어 적을 수 있어요.',url});return}catch(e){if(e.name==='AbortError')return}}
   copy(url,'링크를 복사했어요. 받은 사람도 이어서 적을 수 있어요')};
 
@@ -431,8 +446,18 @@ const DEMO=()=>{const all=['민지','준호','서연','도윤'];return{...blank(
 $('demo').onclick=()=>{S=DEMO();resetForm();render();$('result').scrollIntoView({behavior:'smooth'});toast('예시예요. 기록을 눌러 고쳐 보세요. 내 여행은 ＋ 새 여행')};
 $('reset').onclick=()=>{if(!confirm(`'${S.title||'이름 없는 여행'}'을(를) 지울까요? 되돌릴 수 없어요.`))return;
   delete store.list[store.cur];store.cur=Object.keys(store.list)[0]||newId();store.list[store.cur]??=blank();S=store.list[store.cur];resetForm();setMode('spend');render()};
-if(location.hash.length>1)history.replaceState(null,'',location.pathname);
 resetForm();setMode('spend');render();
+// 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
+(async()=>{
+  const d=new URLSearchParams(location.search).get('d'),h=location.hash.slice(1);
+  if(!d&&!h)return;
+  history.replaceState(null,'',location.pathname);
+  try{const s=clean(d?await unpack(d):JSON.parse(decodeURIComponent(escape(atob(h)))));
+    if(!s.people.length)throw 0;
+    const c=store.list[store.cur];if(c&&!c.people.length&&!c.items.length)delete store.list[store.cur]; // 빈 여행은 남기지 않음
+    const id=newId();store.list[id]=s;store.cur=id;S=s;resetForm();render();toast(`받은 정산을 열었어요: ${s.title||'이름 없는 여행'}`)}
+  catch(e){toast('링크가 잘렸거나 깨졌어요. 링크 전체를 다시 받아 주세요')}
+})();
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
