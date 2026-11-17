@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>여행 정산</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#1c1b19">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
 <meta name="description" content="누가 얼마 냈는지만 적으면, 엔화·달러가 섞여도 누가 누구에게 얼마 보내면 끝인지 알려 줘요. 로그인 없이 바로.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="여행 정산 · 보낼 돈 몇 번이면 끝">
@@ -15,97 +17,118 @@
 <meta property="og:url" content="https://dark-ran.github.io/travel-settle/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231c1b19'/%3E%3Cpath d='M16 10h32v40l-4-3-4 3-4-3-4 3-4-3-4 3-4-3-4 3z' fill='%23fffdf7'/%3E%3Cpath d='M22 20h20M22 27h20M22 34h12' stroke='%231c1b19' stroke-width='3'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#1f2328;--sub:#6b6f76;--line:#e4e0d8;--acc:#0f766e;--acc2:#e6f4f1;--neg:#b42318;--pos:#0f766e;--bar:#14b8a6}
-@media (prefers-color-scheme:dark){:root{--bg:#16181b;--card:#1f2226;--ink:#eceef0;--sub:#9aa0a6;--line:#30343a;--acc:#2dd4bf;--acc2:#16312e;--neg:#f97066;--pos:#2dd4bf;--bar:#2dd4bf}}
+:root{--bg:#e8e4da;--paper:#fffdf7;--ink:#1c1b19;--sub:#6e685d;--line:#e3dccd;--rule:#bdb4a2;--red:#c8371d;--soft:#f3efe5}
+@media (prefers-color-scheme:dark){:root{--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-main{max-width:560px;margin:0 auto;padding:20px 16px 80px}
-#title{font-size:24px;font-weight:700;border:0;background:transparent;padding:2px 0;width:100%;border-bottom:1px dashed transparent;border-radius:0}
-#title:hover,#title:focus{border-bottom-color:var(--line);outline:0}
-.tag{color:var(--sub);margin:2px 0 14px}
-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
-h2{font-size:16px;margin:0 0 10px}
-h2 small{color:var(--sub);font-weight:400}
-h3{font-size:14px;color:var(--sub);margin:14px 0 6px;font-weight:600}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 "IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;-webkit-font-smoothing:antialiased}
+.num,.mono,input[type=number]{font-family:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;font-variant-numeric:tabular-nums}
+.num{white-space:nowrap}
+main{max-width:540px;margin:0 auto;padding:22px 16px 80px}
+.brand{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:.08em}
+.brand span{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--sub);letter-spacing:0;font-size:12px}
+#title{font-size:27px;font-weight:700;letter-spacing:-.02em;border:0;background:transparent;padding:0;width:100%;outline:0}
+#title::placeholder{color:var(--rule)}
+.tag{color:var(--sub);margin:4px 0 16px;font-size:14.5px}
+.tag b{color:var(--ink);font-weight:600}
+section{background:var(--paper);border-radius:2px;padding:18px;margin:14px 0;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+h2{font-size:15px;font-weight:700;margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+h2 i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--red)}
+h2 small{color:var(--sub);font-weight:400;font-size:13px}
+h3{font-size:12px;color:var(--sub);margin:16px 0 6px;font-weight:600;letter-spacing:.04em}
 input,select,button,textarea{font:inherit;color:inherit}
-input,select{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-width:0;width:100%}
-input[type=checkbox]{width:18px;height:18px;padding:0}
-button{border:0;border-radius:10px;padding:9px 14px;background:var(--acc);color:#fff;font-weight:600;cursor:pointer}
-@media (prefers-color-scheme:dark){button{color:#0b1f1d}}
-button.ghost{background:transparent;color:var(--acc);border:1px solid var(--line)}
-button.x{background:transparent;color:var(--sub);padding:4px 8px;font-weight:400}
-button.danger{background:transparent;color:var(--neg);border:1px solid var(--line)}
+input,select{background:transparent;border:0;border-bottom:1px solid var(--rule);border-radius:0;padding:8px 2px;min-width:0;width:100%;outline:0}
+input:focus,select:focus{border-bottom-color:var(--ink)}
+input::placeholder{color:var(--sub);opacity:.8}
+input[type=number]::placeholder{font-family:"IBM Plex Sans KR",system-ui,sans-serif}
+select{appearance:none;background:linear-gradient(45deg,transparent 50%,var(--sub) 50%) right 6px center/5px 5px no-repeat,linear-gradient(-45deg,transparent 50%,var(--sub) 50%) right 1px center/5px 5px no-repeat;padding-right:16px}
+select option{background:var(--paper);color:var(--ink)}
+input[type=checkbox]{appearance:none;width:17px;height:17px;padding:0;border:1.5px solid var(--ink);border-radius:2px;flex:none;display:inline-grid;place-content:center;margin:0;cursor:pointer}
+input[type=checkbox]:checked{background:var(--ink)}
+input[type=checkbox]:checked::after{content:"";width:8px;height:4px;border:2px solid var(--paper);border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+button{border:1px solid var(--ink);border-radius:2px;padding:10px 14px;background:var(--ink);color:var(--paper);font-weight:600;cursor:pointer}
+button.ghost{background:transparent;color:var(--ink)}
+button.x{background:none;border:0;color:var(--sub);padding:4px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
+button.danger{background:transparent;color:var(--red);border-color:var(--red)}
+button:active{transform:translateY(1px)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .row>input{flex:1;width:auto}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{background:var(--acc2);border-radius:999px;padding:5px 12px;display:inline-flex;align-items:center;gap:4px;border:1px solid transparent;cursor:pointer;user-select:none;font-size:15px;color:var(--ink);font-weight:400}
-.chip.del{padding:4px 4px 4px 12px;cursor:default}
-.chip.off{background:transparent;border:1px dashed var(--line);color:var(--sub)}
-.chip.sel{border-color:var(--acc);background:var(--acc2);font-weight:600}
-.chip input.w{width:52px;padding:2px 6px;border-radius:6px;text-align:right}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:transparent;border:1px solid var(--rule);border-radius:2px;padding:4px 10px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none;font-size:14px;color:var(--ink);font-weight:400}
+.chip.del{padding:3px 2px 3px 10px;cursor:default}
+.chip.del button.x{text-decoration:none;padding:0 6px}
+.chip.sel{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip.off{color:var(--sub);text-decoration:line-through;border-style:dashed}
+.chip input.w{width:48px;padding:0 2px;text-align:right;border-bottom-color:var(--rule)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
 .grid .full{grid-column:1/-1}
-.tabs{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:10px}
-.tabs button{flex:1;background:transparent;color:var(--sub);padding:7px}
-.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 2px #0002}
-.day{display:flex;justify-content:space-between;color:var(--sub);font-size:14px;font-weight:600;margin:12px 0 2px;border-bottom:1px solid var(--line);padding-bottom:4px}
-.item{display:flex;justify-content:space-between;gap:8px;padding:9px 6px;border-radius:8px;cursor:pointer}
-.item:hover{background:var(--bg)}
-.item.editing{background:var(--acc2)}
-.item .m{color:var(--sub);font-size:13px}
-.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-.pos{color:var(--pos)}.neg{color:var(--neg)}
-.tx{display:flex;align-items:center;gap:10px;font-size:17px;padding:10px 12px;background:var(--acc2);border-radius:10px;margin:6px 0}
-.tx.done{opacity:.5;text-decoration:line-through}
-.tx .amt{margin-left:auto}
-.big{font-size:30px;font-weight:700;line-height:1.2}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
-.stats div{background:var(--bg);border-radius:10px;padding:8px 10px}
-.stats b{display:block;font-size:17px}
-.muted{color:var(--sub);font-size:14px}
-.bars .r{display:grid;grid-template-columns:84px 1fr auto;gap:8px;align-items:center;margin:5px 0;font-size:14px}
-.bars .t{height:10px;background:var(--bg);border-radius:4px;overflow:hidden}
-.bars .t i{display:block;height:100%;background:var(--bar);border-radius:0 4px 4px 0}
-.ppl{width:100%;border-collapse:collapse;font-size:14px}
-.ppl td,.ppl th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}
+.tabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.tabs button{flex:1;background:none;border:0;color:var(--sub);border-radius:0;padding:8px 4px;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:600}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--ink)}
+.day{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);letter-spacing:.04em;border-bottom:1px solid var(--ink);padding:14px 0 3px;font-weight:600}
+.day:first-child{padding-top:0}
+.item{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px dotted var(--rule);cursor:pointer}
+.item:hover{background:var(--soft)}
+.item.editing{background:var(--soft);box-shadow:inset 3px 0 var(--red)}
+.item .m{color:var(--sub);font-size:12.5px}
+.cat{display:inline-block;font-size:11px;border:1px solid var(--rule);color:var(--sub);padding:0 4px;margin-right:6px;border-radius:2px;vertical-align:2px}
+.pos{color:var(--ink);font-weight:600}.neg{color:var(--red)}
+.receipt{position:relative;padding-bottom:30px;-webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/14px 100%;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/14px 100%}
+.rh{text-align:center;padding-bottom:12px;margin-bottom:10px;border-bottom:1px dashed var(--rule)}
+.rh b{display:block;font-size:17px;letter-spacing:.35em;padding-left:.35em}
+.rh span{font-size:12.5px;color:var(--sub)}
+.rl{display:flex;justify-content:space-between;gap:10px;padding:2px 0;font-size:14px;color:var(--sub)}
+.rl.total{font-size:21px;font-weight:700;color:var(--ink);padding:6px 0 10px;border-bottom:1px dashed var(--rule);margin-bottom:8px}
+.rsub{font-size:13px;font-weight:700;margin:14px 0 4px;letter-spacing:.04em}
+.tx{display:flex;align-items:center;gap:8px;font-size:16px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.tx .lead{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-4px);min-width:12px}
+.tx.done{color:var(--sub)}.tx.done .who{text-decoration:line-through}
+.stamp{position:absolute;right:14px;bottom:96px;background:var(--paper);border:2.5px solid var(--red);color:var(--red);font-weight:700;padding:5px 10px;transform:rotate(-11deg);border-radius:5px;font-size:15px;letter-spacing:.2em;text-align:center;line-height:1.25;opacity:.88;pointer-events:none}
+.muted{color:var(--sub);font-size:13.5px}
+.bars .r{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;margin:6px 0;font-size:13.5px}
+.bars .t{height:7px;background:var(--soft)}
+.bars .t i{display:block;height:100%;background:var(--ink)}
+.ppl{width:100%;border-collapse:collapse;font-size:13.5px}
+.ppl td,.ppl th{padding:6px 2px;border-bottom:1px dotted var(--rule);text-align:right}
 .ppl td:first-child,.ppl th:first-child{text-align:left}
-.ppl th{color:var(--sub);font-weight:500}
-.rate{display:flex;gap:8px;align-items:center;margin:4px 0}
+.ppl th{color:var(--sub);font-weight:500;font-size:12px;border-bottom:1px solid var(--ink)}
+.rate{display:flex;gap:10px;align-items:center;margin:2px 0}
 .rate input{width:110px}
-.rate span:first-child{width:44px;flex:none}
-.hero{display:block;width:100%;text-align:left;background:var(--acc);color:#fff;border-radius:14px;padding:14px 16px}
-.hero b{font-size:17px}.hero span{display:block;opacity:.85;font-size:14px;font-weight:400;margin-top:2px}
-@media (prefers-color-scheme:dark){.hero{color:#0b1f1d}}
-.trips{display:flex;gap:6px;align-items:center;margin:0 0 10px}
-.trips select{flex:1;padding:6px 8px;font-size:14px}
-details.more summary{cursor:pointer;color:var(--sub);font-size:14px;margin:6px 0}
-#modal{position:fixed;inset:0;background:#000b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;z-index:9}
-#modal img{max-width:100%;max-height:75vh;border-radius:12px;-webkit-touch-callout:default}
-#modal p{color:#fff;margin:0;text-align:center}
-#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;opacity:0;transition:.2s;pointer-events:none;max-width:90vw;text-align:center}
+.rate span:first-child{width:44px;flex:none;font-family:"IBM Plex Mono",monospace;font-size:13px}
+.hero{display:block;width:100%;text-align:left;background:transparent;color:var(--ink);border:1px dashed var(--ink);padding:12px 14px;font-weight:400}
+.hero b{font-size:15px;font-weight:700}.hero span{display:block;color:var(--sub);font-size:13px;margin-top:2px}
+.trips{display:flex;gap:10px;align-items:center;margin:0 0 6px}
+.trips select{flex:1;font-size:13.5px;padding:4px 16px 4px 0;color:var(--sub)}
+.trips button{padding:4px 10px;font-size:13px}
+details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px 0}
+#modal{position:fixed;inset:0;background:rgba(20,18,15,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;z-index:9}
+#modal img{max-width:100%;max-height:75vh;-webkit-touch-callout:default}
+#modal p{color:#f3efe5;margin:0;text-align:center;font-size:14px}
+#modal button.ghost{color:#f3efe5;border-color:#f3efe5}
+#modal button:not(.ghost){background:#f3efe5;color:#1c1b19;border-color:#f3efe5}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:2px;opacity:0;transition:.2s;pointer-events:none;max-width:90vw;text-align:center;font-size:14px}
 #toast.on{opacity:1}
 </style>
 </head>
 <body>
 <main>
-<h1 style="font-size:15px;margin:0 0 8px;color:var(--acc)">🧾 여행 정산</h1>
-<div class="trips"><select id="trips" aria-label="여행 고르기"></select><button class="ghost" id="newtrip" style="padding:6px 10px;font-size:14px">＋ 새 여행</button></div>
+<h1 class="brand">여행 정산 <span>로그인 없이 · 무료</span></h1>
+<div class="trips"><select id="trips" aria-label="여행 고르기"></select><button class="ghost" id="newtrip">+ 새 여행</button></div>
 <input id="title" aria-label="여행 이름" maxlength="24" placeholder="여행 이름 (예: 도쿄 3박 4일)">
 <p class="tag">누가 얼마 냈는지만 적으면, <b>누가 누구에게 얼마 보내면 끝인지</b> 바로 알려 줘요. 엔화·달러가 섞여도, 몇 명만 나눠도, 회비를 걷었어도 돼요.</p>
-<button id="demo" class="hero"><b>👀 예시로 먼저 보기</b><span>도쿄 3박 4일 · 4명 · 엔화+원화 · 회비까지 → "보낼 돈 3번이면 끝"</span></button>
+<button id="demo" class="hero"><b>처음이면, 예시 영수증부터 →</b><span>도쿄 3박 4일 · 4명 · 엔화와 원화 · 회비까지 넣으면 "보낼 돈 3번이면 끝"</span></button>
 
 <section>
-  <h2>같이 간 사람</h2>
+  <h2><i>01</i>같이 간 사람</h2>
   <form class="row" id="pf"><input id="pname" placeholder="이름 (예: 민지)" maxlength="12"><button>추가</button></form>
   <div class="chips" id="people"></div>
 </section>
 
 <section id="formsec">
-  <h2 id="formh">기록하기</h2>
-  <div class="tabs" role="tablist"><button type="button" data-mode="spend" class="on">💸 쓴 돈</button><button type="button" data-mode="tr">🔁 건넨 돈 · 회비</button></div>
+  <h2><i>02</i><span id="formh">기록하기</span></h2>
+  <div class="tabs" role="tablist"><button type="button" data-mode="spend" class="on">쓴 돈</button><button type="button" data-mode="tr">건넨 돈 · 회비</button></div>
   <form id="ef" class="grid">
     <input id="ewhat" class="full" placeholder="무엇에? (예: 첫날 저녁 라멘)" maxlength="30">
     <div class="full chips" id="cats" style="margin-top:0"></div>
@@ -123,29 +146,28 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:14px;margin:6px 0
 </section>
 
 <section>
-  <h2>기록 <small id="cnt"></small></h2>
+  <h2><i>03</i>기록 <small id="cnt"></small></h2>
   <div id="items"><p class="muted">아직 기록이 없어요.</p></div>
 </section>
 
-<section>
-  <h2>정산 결과 <small>(원화 기준)</small></h2>
-  <div id="result"><p class="muted">사람 2명 이상과 기록 1개가 있으면 계산돼요.</p></div>
+<section class="receipt">
+  <div id="result"></div>
   <div class="row" style="margin-top:12px">
-    <button id="copy">카톡에 붙일 글 복사</button>
+    <button id="copy">카톡용 글 복사</button>
     <button class="ghost" id="img">이미지로 저장</button>
     <button class="ghost" id="share">링크로 공유</button>
   </div>
 </section>
 
 <section id="viz" hidden>
-  <h2>한눈에 보기</h2>
+  <h2><i>04</i>한눈에 보기</h2>
   <h3>어디에 썼나</h3><div class="bars" id="bycat"></div>
   <h3>며칠째에 썼나</h3><div class="bars" id="byday"></div>
   <h3>사람별</h3><table class="ppl" id="byp"></table>
 </section>
 
 <section>
-  <h2>환율 <small>1단위 = 몇 원</small></h2>
+  <h2><i>05</i>환율 <small>1단위 = 몇 원</small></h2>
   <p class="muted" style="margin-top:0">환율은 날마다 바뀌어요. 기록할 때 <b>실제 빠져나간 원화</b>를 적은 항목은 그 금액 그대로, 안 적은 항목만 아래 환율과 수수료로 어림해요. 현금 항목엔 수수료를 붙이지 않으니, 환전할 때 받은 환율을 넣으면 돼요.</p>
   <div class="rate"><span>카드</span><input type="number" step="any" min="0" id="fee" aria-label="카드 수수료"><span class="muted">% 수수료 (보통 1~2.5%)</span></div>
   <div id="rates"></div>
@@ -161,7 +183,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:14px;margin:6px 0
 <script>
 // ── 계산 부분 (DOM 없이 동작: 중간작업/settle_test.js 가 이 부분을 시험) ──
 const DEFAULT_RATES={KRW:1,JPY:8.37,USD:1335,EUR:1471,CNY:199.7,TWD:40.5,THB:39.4,VND:0.0519,HKD:170.2,SGD:1036,PHP:20.89}; // 2026-11-17 기준값, 앱에서 다시 불러올 수 있음
-const CATS={food:'🍜 식비',move:'🚕 교통',stay:'🏨 숙소',see:'🎫 관광',shop:'🛍 쇼핑',etc:'☕ 기타'};
+const CATS={food:'식비',move:'교통',stay:'숙소',see:'관광',shop:'쇼핑',etc:'기타'};
 function itemWon(it,s){
   if(it.krw>0)return it.krw; // 카드 문자·환전 영수증의 실제 원화가 가장 정확
   const w=it.amt*(s.rates[it.cur]??0);
@@ -273,7 +295,7 @@ function renderForm(){
   const ratio=$('eratio').checked;
   $('among').innerHTML=S.people.map(p=>{const v=W[p]??1;
     return ratio?`<span class="chip"><span>${esc(p)}</span><input class="w" type="number" min="0" step="any" value="${v}" data-wp="${esc(p)}" aria-label="${esc(p)} 비율"></span>`
-      :`<button type="button" class="chip ${v>0?'':'off'}" data-p="${esc(p)}">${esc(p)}</button>`}).join('')||'<span class="muted">사람을 먼저 넣어 주세요.</span>';
+      :`<button type="button" class="chip ${v>0?'sel':'off'}" data-p="${esc(p)}">${esc(p)}</button>`}).join('')||'<span class="muted">사람을 먼저 넣어 주세요.</span>';
   $('esave').textContent=editing>=0?'고치기':'기록하기';$('ecancel').hidden=$('edel').hidden=editing<0;
   $('formh').textContent=editing>=0?'기록 고치기':'기록하기';
 }
@@ -294,8 +316,8 @@ function render(){
     const list=S.items.map((it,i)=>[it,i]).filter(([it])=>(it.day||1)===d).reverse();
     const sum=list.filter(([it])=>it.type!=='tr').reduce((a,[it])=>a+itemWon(it,S),0);
     return `<div class="day"><span>${d}일째</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
-      ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div>🔁 ${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'건넨 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
-      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div>${CATS[it.cat||'etc'].split(' ')[0]} ${esc(it.t||CATS[it.cat||'etc'].split(' ')[1])}</div><div class="m">${esc(it.payer)} ${it.cash?'현금':'결제'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')} 몫</div></div>
+      ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div><span class="cat">건넴</span>${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'건넨 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
+      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(it.payer)} ${it.cash?'현금':'결제'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')} 몫</div></div>
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'실제 ':'≈ '}${won(itemWon(it,S))}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" value="${r}" data-rate="${c}" aria-label="${c} 환율"><span class="muted">원</span></div>`;
@@ -304,13 +326,18 @@ function render(){
   $('rates').innerHTML=rs.filter(([c])=>usedCur.has(c)).map(rateRow).join('');
   $('rates2').innerHTML=rs.filter(([c])=>!usedCur.has(c)).map(rateRow).join('');
   const r=$('result');
-  if(S.people.length<2||!S.items.length){r.innerHTML='<p class="muted">사람 2명 이상과 기록 1개가 있으면 계산돼요.</p>';$('viz').hidden=true;return}
+  if(S.people.length<2||!S.items.length){r.innerHTML='<div class="rh"><b>정산 영수증</b><span>사람 2명 이상과 기록 1개가 있으면 여기에 찍혀요</span></div>';$('viz').hidden=true;return}
   const {bal,tx,paid,used}=settle(S),T=total();
   S.done=S.done.filter(k=>tx.some(t=>txKey(t)===k));
   const left=tx.filter(t=>!S.done.includes(txKey(t))).length;
-  r.innerHTML=`<div class="stats"><div><span class="muted">총 쓴 돈</span><b class="num">${won(T)}</b></div><div><span class="muted">1인 평균</span><b class="num">${won(T/S.people.length)}</b></div><div><span class="muted">기록</span><b>${S.items.length}건</b></div></div>
-    <h2 style="margin-top:14px">${tx.length?`보낼 돈 ${tx.length}번이면 끝${left<tx.length?` <small>(${tx.length-left}번 보냄)</small>`:''}`:'보낼 돈이 없어요'}</h2>
-    ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="보냈어요"><span><b>${esc(t.from)}</b> → <b>${esc(t.to)}</b></span><span class="amt num">${won(t.won)}</span></label>`}).join('')+`<p class="muted" style="margin:4px 0 0">보냈으면 체크해 두세요.${left?'':' 🎉 정산 끝!'}</p>`:'<p>딱 맞게 냈어요!</p>'}`;
+  const dt=new Date().toLocaleDateString('ko-KR');
+  r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${esc(S.title||'이름 없는 여행')} · ${S.people.length}명 · ${dt}</span></div>
+    <div class="rl total"><span>합계</span><span class="num">${won(T)}</span></div>
+    <div class="rl"><span>1인 평균</span><span class="num">${won(T/S.people.length)}</span></div>
+    <div class="rl"><span>기록</span><span class="num">${S.items.length}건</span></div>
+    <div class="rsub">${tx.length?`보낼 돈 · ${tx.length}번이면 끝${left<tx.length?` (${tx.length-left}번 보냄)`:''}`:'보낼 돈 없음'}</div>
+    ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="보냈어요"><span class="who">${esc(t.from)} → ${esc(t.to)}</span><span class="lead"></span><span class="num">${won(t.won)}</span></label>`}).join('')+`<p class="muted" style="margin:8px 0 0">보냈으면 체크해 두세요.</p>`:'<p class="muted">딱 맞게 냈어요.</p>'}
+    ${!tx.length||!left?'<div class="stamp">정산<br>완료</div>':''}`;
   // 한눈에 보기 (막대 한 가지 색, 이름·금액은 글자로 함께 표시)
   $('viz').hidden=false;
   const bars=(rows)=>{const mx=Math.max(...rows.map(x=>x[1]),1);return rows.map(([k,v])=>`<div class="r"><span>${k}</span><span class="t" title="${won(v)}"><i style="width:${(v/mx*100).toFixed(1)}%"></i></span><span class="num">${won(v)} <span class="muted">${T?Math.round(v/T*100):0}%</span></span></div>`).join('')};
@@ -387,7 +414,7 @@ function text(){const {tx}=settle(S),T=total(),bc={};
   S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
   return `[${S.title||'여행 정산'}]\n총 ${won(T)} · ${S.people.length}명 · 1인 평균 ${won(T/S.people.length)}\n`+
     Object.entries(bc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${CATS[k]} ${won(v)}`).join(' / ')+
-    `\n\n💸 보낼 돈\n`+(tx.length?tx.map(t=>`${t.from} → ${t.to} ${won(t.won)}`).join('\n'):'없음 (딱 맞게 냄)')}
+    `\n\n[보낼 돈]\n`+(tx.length?tx.map(t=>`${t.from} → ${t.to} ${won(t.won)}`).join('\n'):'없음 (딱 맞게 냄)')}
 async function copy(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){prompt('아래 내용을 복사하세요',t)}}
 $('copy').onclick=()=>S.items.length&&S.people.length>1?copy(text(),'복사했어요. 카톡에 붙여 넣으세요'):toast('기록이 없어요');
 const b64u=b=>{let s='';for(let i=0;i<b.length;i+=8192)s+=String.fromCharCode(...b.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
@@ -413,25 +440,34 @@ $('share').onclick=async()=>{const url=baseUrl()+'?d='+await pack(S);
 // 결과 카드 이미지 (단톡방에 올리기 좋게 세로형)
 $('img').onclick=()=>{
   if(!S.items.length||S.people.length<2)return toast('기록이 없어요');
-  const {tx}=settle(S),T=total(),W2=1080,F='system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif';
+  const {tx}=settle(S),T=total(),W2=1080,F='"IBM Plex Sans KR",system-ui,"Apple SD Gothic Neo","Noto Sans KR",sans-serif',M='"IBM Plex Mono",ui-monospace,monospace';
   const bc={};S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
-  const cats=Object.entries(bc).sort((a,b)=>b[1]-a[1]);
-  const H=520+Math.max(tx.length,1)*110+cats.length*64+120;
+  const cats=Object.entries(bc).sort((a,b)=>b[1]-a[1]),allDone=!tx.length||tx.every(t=>S.done.includes(txKey(t)));
+  const H=640+Math.max(tx.length,1)*80+cats.length*58+220;
   const c=document.createElement('canvas');c.width=W2;c.height=H;const g=c.getContext('2d');
-  g.fillStyle='#f6f4ef';g.fillRect(0,0,W2,H);
-  g.fillStyle='#0f766e';g.fillRect(0,0,W2,300);
-  g.fillStyle='#fff';g.font=`700 64px ${F}`;g.fillText(S.title||'여행 정산',72,130);
-  g.font=`400 40px ${F}`;g.fillText(`${S.people.length}명 · 총 ${won(T)} · 1인 평균 ${won(T/S.people.length)}`,72,210);
-  let y=400;g.fillStyle='#1f2328';g.font=`700 48px ${F}`;g.fillText(tx.length?`보낼 돈 ${tx.length}번이면 끝`:'보낼 돈 없음',72,y);y+=50;
-  for(const t of tx){g.fillStyle='#e6f4f1';g.beginPath();g.roundRect?g.roundRect(72,y,W2-144,90,20):g.rect(72,y,W2-144,90);g.fill();
-    g.fillStyle='#1f2328';g.font=`600 42px ${F}`;g.fillText(`${t.from}  →  ${t.to}`,108,y+60);
-    g.textAlign='right';g.fillText(won(t.won),W2-108,y+60);g.textAlign='left';y+=110}
-  y+=60;g.font=`700 40px ${F}`;g.fillStyle='#1f2328';g.fillText('어디에 썼나',72,y);y+=30;
-  const mx=Math.max(...cats.map(x=>x[1]),1);
-  for(const [k,v] of cats){g.font=`400 34px ${F}`;g.fillStyle='#1f2328';g.fillText(CATS[k],72,y+38);
-    g.fillStyle='#e4e0d8';g.fillRect(300,y+16,440,26);g.fillStyle='#14b8a6';g.fillRect(300,y+16,440*v/mx,26);
-    g.fillStyle='#1f2328';g.textAlign='right';g.fillText(won(v),W2-72,y+38);g.textAlign='left';y+=64}
-  g.fillStyle='#6b6f76';g.font=`400 28px ${F}`;g.fillText('여행 정산 · 로그인 없이 바로 써요',72,H-50);
+  const X0=110,X1=W2-110,INK='#1c1b19',SUB='#6e685d',RULE='#bdb4a2';
+  g.fillStyle='#e8e4da';g.fillRect(0,0,W2,H);
+  // 종이 + 아래 톱니
+  g.fillStyle='#fffdf7';g.beginPath();g.moveTo(70,60);g.lineTo(W2-70,60);let zy=H-90;g.lineTo(W2-70,zy);
+  for(let x=W2-70;x>70;x-=20){g.lineTo(x-10,zy+12);g.lineTo(x-20,zy)}g.closePath();g.fill();
+  const line=(y,dash)=>{g.strokeStyle=RULE;g.lineWidth=2;g.setLineDash(dash||[8,7]);g.beginPath();g.moveTo(X0,y);g.lineTo(X1,y);g.stroke();g.setLineDash([])};
+  const lr=(l,r,y,f1,f2,col)=>{g.fillStyle=col||INK;g.font=f1;g.textAlign='left';g.fillText(l,X0,y);g.font=f2||f1;g.textAlign='right';g.fillText(r,X1,y);g.textAlign='left'};
+  g.textAlign='center';g.fillStyle=INK;g.font=`700 44px ${F}`;g.fillText('정 산 영 수 증',W2/2,160);
+  g.fillStyle=SUB;g.font=`400 30px ${F}`;g.fillText(`${S.title||'이름 없는 여행'} · ${S.people.length}명 · ${new Date().toLocaleDateString('ko-KR')}`,W2/2,212);g.textAlign='left';
+  line(250);
+  lr('합계',won(T),320,`700 46px ${F}`,`700 46px ${M}`);
+  lr('1인 평균',won(T/S.people.length),376,`400 30px ${F}`,`400 30px ${M}`,SUB);
+  line(410);
+  let y=480;g.fillStyle=INK;g.font=`700 32px ${F}`;g.fillText(tx.length?`보낼 돈 · ${tx.length}번이면 끝`:'보낼 돈 없음',X0,y);y+=24;
+  for(const t of tx){y+=62;const d=S.done.includes(txKey(t));
+    lr(`${t.from} → ${t.to}`,won(t.won),y,`600 36px ${F}`,`600 36px ${M}`,d?SUB:INK);
+    g.font=`600 36px ${F}`;const w1=g.measureText(`${t.from} → ${t.to}`).width;g.font=`600 36px ${M}`;const w2=g.measureText(won(t.won)).width;
+    g.strokeStyle=RULE;g.setLineDash([3,7]);g.lineWidth=2;g.beginPath();g.moveTo(X0+w1+16,y-8);g.lineTo(X1-w2-16,y-8);g.stroke();g.setLineDash([]);y+=18}
+  y+=40;line(y);y+=60;g.fillStyle=INK;g.font=`700 30px ${F}`;g.fillText('어디에 썼나',X0,y);
+  for(const [k,v] of cats){y+=58;lr(`${CATS[k]}  ${T?Math.round(v/T*100):0}%`,won(v),y,`400 30px ${F}`,`400 30px ${M}`)}
+  g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산 · dark-ran.github.io/travel-settle',W2/2,zy-40);g.textAlign='left';
+  if(allDone){g.save();g.translate(X1-120,300);g.rotate(-0.19);g.strokeStyle='#c8371d';g.fillStyle='#c8371d';g.globalAlpha=.85;g.lineWidth=6;
+    g.strokeRect(-110,-60,220,120);g.font=`700 44px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,16);g.restore()}
   const src=c.toDataURL('image/png'),name=(S.title||'여행정산')+'.png';
   const m=document.createElement('div');m.id='modal';
   m.innerHTML=`<img alt="정산 결과 이미지"><p>저장이 안 되면 이미지를 <b>길게 눌러</b> 저장하세요</p><div class="row"><button id="msave">저장</button>${navigator.canShare?'<button id="mshare" class="ghost" style="color:#fff">보내기</button>':''}<button id="mclose" class="ghost" style="color:#fff">닫기</button></div>`;
