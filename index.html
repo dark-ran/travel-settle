@@ -6,6 +6,14 @@
 <title>여행 정산</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f766e">
+<meta name="description" content="누가 얼마 냈는지만 적으면, 엔화·달러가 섞여도 누가 누구에게 얼마 보내면 끝인지 알려 줘요. 로그인 없이 바로.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="여행 정산 · 보낼 돈 몇 번이면 끝">
+<meta property="og:description" content="누가 얼마 냈는지만 적으면, 엔화·달러가 섞여도 누가 누구에게 얼마 보내면 끝인지 알려 줘요. 로그인 없이 바로.">
+<meta property="og:image" content="https://dark-ran.github.io/travel-settle/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://dark-ran.github.io/travel-settle/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
 <style>
@@ -387,7 +395,7 @@ const unb64u=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c
 const pipe=(bytes,ts)=>new Response(new Blob([bytes]).stream().pipeThrough(ts)).arrayBuffer().then(b=>new Uint8Array(b));
 async function pack(s){
   const used=new Set(s.items.map(it=>it.cur));const rates={};for(const c of used)rates[c]=s.rates[c]; // 쓴 통화만 담아 링크를 짧게
-  const raw=new TextEncoder().encode(JSON.stringify({...s,rates,done:[]}));
+  const raw=new TextEncoder().encode(JSON.stringify({...s,rates,done:[],id:store.cur}));
   if(window.CompressionStream){try{return 'z'+b64u(await pipe(raw,new CompressionStream('deflate-raw')))}catch(e){}}
   return 'j'+b64u(raw);
 }
@@ -452,10 +460,13 @@ resetForm();setMode('spend');render();
   const d=new URLSearchParams(location.search).get('d'),h=location.hash.slice(1);
   if(!d&&!h)return;
   history.replaceState(null,'',location.pathname);
-  try{const s=clean(d?await unpack(d):JSON.parse(decodeURIComponent(escape(atob(h)))));
+  try{const raw=d?await unpack(d):JSON.parse(decodeURIComponent(escape(atob(h)))),s=clean(raw);
     if(!s.people.length)throw 0;
     const c=store.list[store.cur];if(c&&!c.people.length&&!c.items.length)delete store.list[store.cur]; // 빈 여행은 남기지 않음
-    const id=newId();store.list[id]=s;store.cur=id;S=s;resetForm();render();toast(`받은 정산을 열었어요: ${s.title||'이름 없는 여행'}`)}
+    // 같은 여행(같은 id)을 다시 받으면 덮어쓸지 묻는다: 친구가 고쳐 보낸 링크가 사본으로 쌓이지 않게
+    let id=typeof raw.id==='string'&&/^t[a-z0-9]{1,20}$/.test(raw.id)?raw.id:newId(),upd=false;
+    if(store.list[id]){if(confirm(`이미 있는 '${store.list[id].title||'이름 없는 여행'}'이에요. 받은 내용으로 바꿀까요?\n(취소하면 따로 하나 더 만들어요)`))upd=true;else id=newId()}
+    store.list[id]=s;store.cur=id;S=s;resetForm();render();toast(`${upd?'받은 내용으로 바꿨어요':'받은 정산을 열었어요'}: ${s.title||'이름 없는 여행'}`)}
   catch(e){toast('링크가 잘렸거나 깨졌어요. 링크 전체를 다시 받아 주세요')}
 })();
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
