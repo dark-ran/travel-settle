@@ -318,7 +318,10 @@ function save(){store.list[store.cur]=S;try{localStorage.setItem('trip-settle-v2
 function renderTrips(){
   $('trips').innerHTML=Object.entries(store.list).map(([id,s])=>`<option value="${id}" ${id===store.cur?'selected':''}>${esc(s.title||'이름 없는 여행')}${s.items.length?` · ${s.items.length}건`:''}</option>`).join('');
 }
-let tt;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),1800)}
+let tt;function toast(t,undo){const e=$('toast');e.textContent=t;e.style.pointerEvents=undo?'auto':'none';
+  if(undo){const b=document.createElement('button');b.textContent='되돌리기';b.className='x';b.style.cssText='color:inherit;margin-left:10px;font-weight:700';
+    b.onclick=()=>{undo();e.classList.remove('on')};e.append(b)}
+  e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>{e.classList.remove('on');e.style.pointerEvents='none'},undo?5000:1800)}
 const txKey=t=>t.from+'>'+t.to+'>'+t.won;
 const total=()=>S.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,S),0);
 const maxDay=()=>Math.max(3,S.day,...S.items.map(it=>it.day||1))+1;
@@ -414,9 +417,9 @@ $('pf').onsubmit=e=>{e.preventDefault();const n=$('pname').value.trim();
   S.people.push(n);W[n]=1;$('pname').value='';render();$('pname').focus()};
 $('people').onclick=async e=>{const i=e.target.dataset.del;if(i==null)return;const p=S.people[i];
   if(S.items.some(it=>it.payer===p||it.to===p||(it.among||[]).includes(p))&&!await ask(`${p}이(가) 들어간 기록이 있어요. 빼면 ${p}이(가) 낸 기록은 지워지고, 나눈 기록에서도 빠져요.`,'빼기'))return;
-  S.people.splice(i,1);delete W[p];
+  const u=undoable();S.people.splice(i,1);delete W[p];
   S.items=S.items.filter(it=>it.payer!==p&&it.to!==p).map(it=>it.type==='tr'?it:{...it,among:it.among.filter(x=>x!==p)}).filter(it=>it.type==='tr'||it.among.length);
-  resetForm();render()};
+  resetForm();render();toast(`${p} 뺐어요`,u)};
 document.querySelector('.tabs').onclick=e=>{const m=e.target.dataset.mode;if(m&&editing<0)setMode(m)};
 $('cats').onclick=e=>{const c=e.target.dataset.cat;if(c){cat=c;renderForm()}};
 $('among').onclick=e=>{const p=e.target.dataset.p;if(p==null)return;W[p]=(W[p]??1)>0?0:1;renderForm()};
@@ -454,8 +457,10 @@ $('items').onclick=e=>{const el=e.target.closest('[data-ed]');if(!el)return;cons
   renderForm();$('eday').value=it.day||1;$('epayer').value=it.payer;if(it.type==='tr')$('eto').value=it.to;
   render();$('formsec').scrollIntoView({behavior:'smooth'})};
 $('ecancel').onclick=()=>{resetForm();render()};
-$('edel').onclick=()=>{if(editing<0)return;const it=S.items.splice(editing,1)[0];resetForm();render();
-  toast(`지웠어요: ${it.t||'기록'}`)};
+// 지우기 전 상태를 잡아 두고 5초 동안 되돌릴 수 있게
+function undoable(){const id=store.cur,snap=JSON.stringify(S);return()=>{if(!store.list[id])return;store.list[id]=JSON.parse(snap);store.cur=id;S=store.list[id];resetForm();render();toast('되돌렸어요')}}
+$('edel').onclick=()=>{if(editing<0)return;const u=undoable(),it=S.items.splice(editing,1)[0];resetForm();render();
+  toast(`지웠어요: ${it.t||'기록'}`,u)};
 $('result').onchange=e=>{const k=e.target.dataset.tx;if(!k)return;
   e.target.checked?S.done.push(k):S.done=S.done.filter(x=>x!==k);render()};
 $('rates').onchange=$('rates2').onchange=e=>{const c=e.target.dataset.rate,v=parseFloat(e.target.value);if(c&&v>0){S.rates[c]=v;S.manual[c]=true;render()}};
@@ -570,7 +575,7 @@ $('img').onclick=()=>{
     g.strokeStyle=RULE;g.setLineDash([3,7]);g.lineWidth=2;g.beginPath();g.moveTo(X0+w1+16,y-8);g.lineTo(X1-w2-16,y-8);g.stroke();g.setLineDash([]);y+=18}
   y+=40;line(y);y+=60;g.fillStyle=INK;g.font=`700 30px ${F}`;g.fillText('어디에 썼나',X0,y);
   for(const [k,v] of cats){y+=58;lr(`${CATS[k]}  ${T?Math.round(v/T*100):0}%`,won(v),y,`400 30px ${F}`,`400 30px ${M}`)}
-  g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산 · dark-ran.github.io/travel-settle',W2/2,zy-40);g.textAlign='left';
+  g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산',W2/2,zy-40);g.textAlign='left';
   if(allDone){g.save();g.translate(X1-95,140);g.rotate(-0.19);g.strokeStyle=RED;g.fillStyle=RED;g.globalAlpha=.85;g.lineWidth=6;
     g.strokeRect(-95,-48,190,96);g.font=`700 38px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,13);g.restore()}
   const src=c.toDataURL('image/png'),name=(S.title||'여행정산')+'.png';
