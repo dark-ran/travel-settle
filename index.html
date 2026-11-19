@@ -26,16 +26,16 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231c1b19'/%3E%3Cpath d='M16 10h32v40l-4-3-4 3-4-3-4 3-4-3-4 3-4-3-4 3z' fill='%23fffdf7'/%3E%3Cpath d='M22 20h20M22 27h20M22 34h12' stroke='%231c1b19' stroke-width='3'/%3E%3C/svg%3E">
 <style>
 :root{--font:"Settle Sans",system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;--bg:#e8e4da;--paper:#fffdf7;--ink:#1c1b19;--sub:#5f594f;--line:#e3dccd;--rule:#bdb4a2;--red:#c8371d;--soft:#f3efe5}
-@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#b3aa9a;--line:#35312b;--rule:#7a705e;--red:#ef6b4f;--soft:#2b2924}}
 :root[data-theme=white]{--bg:#f1f1ef;--paper:#fff;--ink:#111;--sub:#6b6b6b;--line:#e6e6e6;--rule:#bdbdbd;--red:#e0301e;--soft:#f5f5f4}
-:root[data-theme=night]{--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#a39b8c;--line:#35312b;--rule:#5a5345;--red:#ef6b4f;--soft:#2b2924}
+:root[data-theme=night]{--bg:#151412;--paper:#22201c;--ink:#ece6d8;--sub:#b3aa9a;--line:#35312b;--rule:#7a705e;--red:#ef6b4f;--soft:#2b2924}
 :root[data-theme=blue]{--bg:#dfe5ee;--paper:#fbfcfe;--ink:#1d3a8a;--sub:#5b6b8c;--line:#dfe5f0;--rule:#a9b6d0;--red:#d9452b;--soft:#eef2f9}
-:root[data-theme=pink]{--bg:#f4dfe3;--paper:#fffafa;--ink:#4a2330;--sub:#8c6670;--line:#f1dfe3;--rule:#d6b3bc;--red:#d63f6c;--soft:#fbeef1}
+:root[data-theme=pink]{--bg:#f4dfe3;--paper:#fffafa;--ink:#4a2330;--sub:#6f4c56;--line:#f1dfe3;--rule:#b98d99;--red:#d63f6c;--soft:#fbeef1}
 :root[data-theme=green]{--bg:#d9e2d3;--paper:#fbfdf8;--ink:#20372a;--sub:#5f7365;--line:#e1e9dc;--rule:#a7b8a3;--red:#c0562b;--soft:#eef4ea}
 :root[data-font=myeongjo]{--font:"Gowun Batang","Nanum Myeongjo",serif}
 :root[data-font=hand]{--font:"Gaegu","Nanum Pen Script",cursive}
 :root[data-font=hand] body{font-size:20px}:root[data-font=hand] .muted,:root[data-font=hand] .m,:root[data-font=hand] .chip,:root[data-font=hand] h3{font-size:17px}:root[data-font=hand] h2{font-size:19px}:root[data-font=hand] #cats .chip{font-size:16px}:root[data-font=hand] .tabs button{font-size:16px}:root[data-font=hand] .item .num{font-size:15px}:root[data-font=hand] .item>div:first-child>div:first-child{font-size:17px}:root[data-font=hand] .item>div:first-child{min-width:0;flex:1}
-.look{margin:8px 0 12px}
+.look{margin:14px 0 4px}
 .look summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink);display:inline-block;border:1px solid var(--rule);padding:6px 10px;border-radius:2px}
 .look summary::-webkit-details-marker{display:none}
 .lookp{background:var(--paper);padding:12px 14px;margin-top:8px;border-radius:2px}
@@ -51,7 +51,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 var(--font)
 main{max-width:540px;margin:0 auto;padding:22px 16px 80px}
 .brand{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 14px;font-size:17px;font-weight:700;letter-spacing:.04em}
 .brand span{font-weight:600;color:var(--sub);letter-spacing:0;font-size:13px}
-#title{font-size:22px;font-weight:700;letter-spacing:-.02em;border:0;border-bottom:1.5px dashed var(--rule);border-radius:0;background:transparent;padding:2px 0 4px;width:100%;outline:0}
+#title{font-size:19px;font-weight:700;letter-spacing:-.02em;border:0;border-bottom:1.5px dashed var(--rule);border-radius:0;background:transparent;padding:2px 0 4px;width:100%;outline:0}
 #title:focus{border-bottom-color:var(--ink)}
 .tlabel{display:block;font-size:12px;color:var(--sub);margin:4px 0 0}
 #title::placeholder{color:var(--sub);opacity:.75;font-weight:400}
@@ -119,7 +119,7 @@ button:active{transform:translateY(1px)}
 .bars .r>.num{text-align:right}
 .bars .t i{display:block;height:100%;background:var(--ink)}
 .ppl{width:100%;border-collapse:collapse;font-size:12.5px}
-.ppl td,.ppl th{white-space:nowrap}
+.ppl td,.ppl th{white-space:nowrap;padding-left:8px}
 .ppl td,.ppl th{padding:6px 2px;border-bottom:1px dotted var(--rule);text-align:right}
 .ppl td:first-child,.ppl th:first-child{text-align:left}
 .ppl th{color:var(--sub);font-weight:500;font-size:12px;border-bottom:1px solid var(--ink)}
@@ -183,10 +183,6 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
 <label class="tlabel" for="title">여행 이름 (선택)</label>
 <input id="title" maxlength="24" placeholder="예: 도쿄 3박 4일">
 <div class="rate" style="margin-top:8px"><label for="start" class="muted" style="width:auto;font-size:13px">여행 첫날 (선택)</label><input type="date" id="start" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote" style="font-size:12.5px"></span></div>
-<details class="look"><summary>색·글꼴 바꾸기</summary><div class="lookp">
-  <div class="muted">색</div><div class="sw" id="themes"></div>
-  <div class="muted">글꼴</div><div class="sw" id="fonts"></div>
-</div></details>
 
 <section>
   <h2><i>01</i>같이 간 사람 <small>별명이면 충분해요</small></h2>
@@ -197,13 +193,13 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
 
 <section id="formsec">
   <h2><i>02</i><span id="formh">기록하기</span></h2>
-  <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-mode="spend" class="on">쓴 돈</button><button type="button" role="tab" aria-selected="false" data-mode="tr">먼저 보낸 돈 · 회비</button></div>
+  <div class="tabs" role="tablist"><button type="button" role="tab" aria-selected="true" data-mode="spend" class="on">쓴 돈</button><button type="button" role="tab" aria-selected="false" data-mode="tr">회비·먼저 보낸 돈</button></div>
   <form id="ef" class="grid" role="tabpanel" aria-label="기록 입력">
     <input id="ewhat" class="full" aria-label="무엇에 썼나요" placeholder="무엇에? (예: 첫날 저녁 라멘)" maxlength="30">
     <div class="full chips" id="cats" style="margin-top:0"></div>
     <input id="eamt" aria-label="금액" type="number" inputmode="decimal" min="0" step="any" placeholder="금액">
     <select id="ecur" aria-label="통화"></select>
-    <button type="button" class="x full sp" id="ekrwtoggle" style="text-align:left;padding:2px 0" aria-expanded="false">+ 카드 청구 원화·현금 입력</button>
+    <button type="button" class="x full sp" id="ekrwtoggle" style="text-align:left;padding:2px 0" aria-expanded="false">+ 카드 원화 / 현금 입력</button>
     <input id="ekrw" class="full" aria-label="카드 결제 알림에 뜬 원화" type="number" inputmode="decimal" min="0" step="any" placeholder="카드 결제 알림에 뜬 원화 (모르면 비워 두세요)">
     <label class="full muted sp" id="ecashw" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="ecash"> 현금으로 냈어요 (카드 수수료 안 붙임)</label>
     <select id="eday" aria-label="며칠째"></select>
@@ -233,7 +229,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
 <section id="viz" hidden>
   <h2><i>04</i>한눈에 보기</h2>
   <h3>어디에 썼나</h3><div class="bars" id="bycat"></div>
-  <h3>며칠째에 썼나</h3><div class="bars" id="byday"></div>
+  <h3>날짜별로 썼나</h3><div class="bars" id="byday"></div>
   <h3>사람별</h3><div style="overflow-x:auto"><table class="ppl" id="byp"></table></div><p class="muted" id="bypnote" style="margin:6px 0 0;font-size:12.5px"></p>
 </section>
 
@@ -252,11 +248,15 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
   오늘 환율: <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener" style="color:inherit">Rates By Exchange Rate API</a> · 지난 환율: <a href="https://frankfurter.dev" target="_blank" rel="noopener" style="color:inherit">Frankfurter</a>(유럽중앙은행 기준, 주말·공휴일은 없음, 대만 달러·베트남 동은 없음)</p>
 </section>
 
+<details class="look"><summary>색·글꼴 바꾸기</summary><div class="lookp">
+  <div class="muted">색</div><div class="sw" id="themes"></div>
+  <div class="muted">글꼴</div><div class="sw" id="fonts"></div>
+</div></details>
 <p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용(별명·금액)이 담기니 정산할 사람에게만 보내세요. 환율과 명조·손글씨 글꼴은 인터넷에서 받아요(별명·금액은 보내지 않아요).
 <button class="x" id="reset">이 여행 지우기</button></p>
 </main>
 <button id="bar" hidden></button>
-<div id="toast" role="status"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ── 계산 부분 (DOM 없이 동작: 중간작업/settle_test.js 가 이 부분을 시험) ──
@@ -328,6 +328,12 @@ const josa=(w,a,b)=>{const c=String(w).charCodeAt(String(w).length-1);return w+(
 function countText(s){const tr=s.items.filter(it=>it.type==='tr').length,sp=s.items.length-tr;return s.items.length?`${sp}건${tr?` · 먼저 보낸 돈 ${tr}건`:''}`:''}
 // 보이는 금액을 더하면 합계(반올림)와 같게: 내림 뒤 남은 원을 소수점이 큰 순서로 1원씩
 function apportion(vals,total){const t=Math.round(total),fl=vals.map(v=>Math.floor(v));let left=t-fl.reduce((a,b)=>a+b,0);vals.map((v,i)=>[v-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(left>0){fl[i]++;left--}});return fl}
+// 분류별·날짜별 합계: 화면 막대·이미지 카드·카톡 글이 모두 이 값만 씀(보이는 금액의 합 = 합계)
+function groupRows(s,key){const T=s.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,s),0),g={};
+  s.items.filter(it=>it.type!=='tr').forEach(it=>{const k=key(it);g[k]=(g[k]||0)+itemWon(it,s)});
+  const rows=Object.entries(g),ap=apportion(rows.map(x=>x[1]),T),pc=apportion(rows.map(x=>T?x[1]/T*100:0),T?100:0);return rows.map(([k,v],i)=>({k,raw:v,won:ap[i],pct:T?pc[i]:0}))}
+const catRows=s=>groupRows(s,it=>it.cat||'etc').sort((a,b)=>b.raw-a.raw).map(r=>({...r,label:CATS[r.k]}));
+const dayRows=s=>groupRows(s,it=>it.day||1).sort((a,b)=>a.k-b.k).map(r=>({...r,label:`${r.k}일째`}));
 // 영수증·이미지 카드가 같이 쓰는 날짜: 첫날이 있으면 여행 기간, 없으면 오늘
 function tripDates(s){const fd=d=>d.slice(5).replace('-','. ')+'.',last=Math.max(1,...s.items.map(it=>it.day||1));return validDate(s.start)?`${s.start.slice(0,4)}. ${fd(s.start)} ~ ${fd(itemDate({day:last},s))}`:new Date().toLocaleDateString('ko-KR')}
 const won=n=>(Math.round(n)||0).toLocaleString('ko-KR')+'원'; // -0원 방지
@@ -340,7 +346,7 @@ let S=load(),mode='spend',W={},cat='food',editing=-1;
 // 공유 링크·저장본은 남이 만든 데이터일 수 있으니 형태를 확인해 정리한다
 function clean(s){
   const b=blank();if(!s||typeof s!=='object')return b;
-  const str=(v,n)=>typeof v==='string'?v.slice(0,n):'';
+  const str=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f]/g,'').slice(0,n):'';
   const people=Array.isArray(s.people)?[...new Set(s.people.map(p=>str(p,12).trim()).filter(p=>p&&!BAD_NAMES.includes(p)))].slice(0,30):[];
   const rates={...b.rates};if(s.rates&&typeof s.rates==='object')for(const c of Object.keys(s.rates).slice(0,40))if(/^[A-Z]{3}$/.test(c)&&num(s.rates[c],1e7))rates[c]=+s.rates[c];
   rates.KRW=1;
@@ -378,7 +384,7 @@ function renderTrips(){
 }
 let tt;function toast(t,undo,ms){const e=$('toast');e.textContent=t;e.style.pointerEvents=undo?'auto':'none';
   if(undo){const b=document.createElement('button');b.textContent='되돌리기';b.className='x';b.style.cssText='color:inherit;margin-left:10px;font-weight:700';
-    b.onclick=()=>{undo();e.classList.remove('on')};e.append(b)}
+    b.onclick=()=>{undo();e.classList.remove('on');e.style.pointerEvents='none'};e.append(b)}
   e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>{e.classList.remove('on');e.style.pointerEvents='none'},ms||(undo?8000:1800))}
 const txKey=t=>t.from+'\u0001'+t.to+'\u0001'+t.won;
 const total=()=>S.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,S),0);
@@ -414,8 +420,11 @@ function renderForm(){
 }
 
 // 화면 그리기가 겹치지 않게(그리는 도중 blur·change로 다시 불리면 끝난 뒤 한 번 더)
-let inRender=false,again=false;
-function render(){if(inRender){again=true;return}inRender=true;try{renderNow()}finally{inRender=false;if(again){again=false;render()}}}
+let inRender=false,again=false,ptrDown=false,deferred=false;
+// 누르고 있는 동안 화면을 다시 그리면 손가락 아래 버튼이 바뀌어 클릭이 사라짐 → 손을 뗀 뒤에 그림
+document.addEventListener('pointerdown',()=>{ptrDown=true},true);
+['pointerup','pointercancel'].forEach(ev=>document.addEventListener(ev,()=>{ptrDown=false;setTimeout(()=>{if(deferred){deferred=false;render()}},0)},true));
+function render(){if(ptrDown){deferred=true;return}if(inRender){again=true;return}inRender=true;try{renderNow()}finally{inRender=false;if(again){again=false;render()}}}
 function renderNow(){
   save();renderTrips();document.querySelector('.trips').hidden=Object.keys(store.list).length<2&&!S.people.length&&!S.items.length&&!S.title;setTimeout(()=>ensureDayRates&&ensureDayRates(),0);
   $('title').value=S.title;document.title=S.title||'여행 정산';
@@ -436,7 +445,7 @@ function renderNow(){
     const dd=itemDate({day:d},S);
     return `<div class="day"><span>${d}일째${dd?` · ${dd.slice(5).replace('-','. ')}.`:''}</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
       ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">보냄</span>${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'건넨 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
-      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(it.payer)} ${it.cash?'현금':'결제'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')} 몫</div></div>
+      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(it.payer)} ${it.cash?'현금':'결제'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')}\u00a0몫</div></div>
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'카드 청구 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span>(${rateFor(it,S).date.slice(5).replace('-','. ')}. 환율)</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
@@ -459,18 +468,16 @@ function renderNow(){
     <div class="rl total"><span>합계</span><span class="num">${won(T)}</span></div>
     <div class="rl"><span>1인 평균</span><span class="num">${won(T/S.people.length)}</span></div>
     <div class="rl"><span>기록</span><span class="num">${countText(S)}</span></div>
-    <div class="rsub">${tx.length?`보낼 돈 · ${tx.length}번이면 끝${left<tx.length?` (${tx.length-left}번 보냄)`:''}`:'보낼 돈 없음'}</div>
+    <div class="rsub">${tx.length?`보낼 돈 · ${tx.length}번이면 끝${left===0?' (다 보냈어요)':left<tx.length?` (${tx.length-left}번 보냄)`:''}`:'보낼 돈 없음'}</div>
     ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="${esc(josa(t.from,'이','가'))} ${esc(t.to)}에게 보냈어요"><span class="who">${esc(t.from)} → ${esc(t.to)}</span><span class="lead"></span><span class="num">${won(t.won)}</span></label>`}).join('')+`<p class="muted" style="margin:8px 0 0">보냈으면 체크해 두세요.</p>`:'<p class="muted">딱 맞게 냈어요.</p>'}
     ${!tx.length||!left?'<div class="stamp">정산<br>완료</div>':''}`;
   // 한눈에 보기 (막대 한 가지 색, 이름·금액은 글자로 함께 표시)
   $('viz').hidden=false;
   const pct=vals=>{const s=vals.reduce((a,b)=>a+b,0)||1,raw=vals.map(v=>v/s*100),fl=raw.map(Math.floor);let left=100-fl.reduce((a,b)=>a+b,0);raw.map((v,i)=>[v-fl[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(left-->0)fl[i]++});return fl}; // 합이 100%가 되게
   const bars=(rows)=>{ // 금액 칸 폭을 고정해 막대 바탕 길이를 맞춤
-const mx=Math.max(...rows.map(x=>x[1]),1),pc=pct(rows.map(x=>x[1])),ap=apportion(rows.map(x=>x[1]),T);return rows.map(([k,v],i)=>`<div class="r"><span>${k}</span><span class="t" title="${won(ap[i])}"><i style="width:${(v/mx*100).toFixed(1)}%"></i></span><span class="num">${won(ap[i])} <span class="muted">${pc[i]}%</span></span></div>`).join('')};
-  const bc={};S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
-  $('bycat').innerHTML=bars(Object.entries(bc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[CATS[k],v]));
-  const bd={};S.items.filter(it=>it.type!=='tr').forEach(it=>bd[it.day||1]=(bd[it.day||1]||0)+itemWon(it,S));
-  $('byday').innerHTML=bars(Object.keys(bd).sort((a,b)=>a-b).map(d=>[`${d}일째`,bd[d]]));
+const mx=Math.max(...rows.map(x=>x.raw),1);return rows.map(x=>`<div class="r"><span>${x.label}</span><span class="t" title="${won(x.won)}"><i style="width:${(x.raw/mx*100).toFixed(1)}%"></i></span><span class="num">${won(x.won)} <span class="muted">${x.pct}%</span></span></div>`).join('')};
+  $('bycat').innerHTML=bars(catRows(S));
+  $('byday').innerHTML=bars(dayRows(S));
   const hasTr=S.items.some(it=>it.type==='tr');
   const P=S.people,pd=apportion(P.map(p=>paid[p]),T),us=apportion(P.map(p=>used[p]),T),ix=Object.fromEntries(P.map((p,i)=>[p,i]));
   $('bypnote').textContent=(hasTr?'받을·보낼 = 낸 돈 − 내 몫 + 보낸 회비 − 받은 회비':'받을·보낼 = 낸 돈 − 내 몫')+' · +는 받을 돈, −는 보낼 돈 · 원 단위 반올림';
@@ -515,7 +522,7 @@ $('ef').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.isComposing)e.preve
 $('ef').onsubmit=e=>{e.preventDefault();
   const amt=parseFloat($('eamt').value),payer=$('epayer').value,day=+$('eday').value||1;
   if(S.people.length<2)return toast('사람을 2명 이상 넣어 주세요');
-  if(!(amt>0)||!Number.isFinite(amt)||amt>1e10)return toast('금액을 확인해 주세요');
+  if(!(amt>0)||!Number.isFinite(amt)||amt>1e10||(mode==='tr'||$('ecur').value==='KRW')&&amt<1)return toast('금액을 확인해 주세요');
   if(editing<0&&S.items.length>=500)return toast('기록은 500건까지예요');
   if(!payer)return toast(mode==='tr'?'준 사람을 골라 주세요':'낸 사람을 골라 주세요');
   let it;
@@ -550,7 +557,7 @@ function renamePerson(a,b){const sw=x=>x===a?b:x;S.people=S.people.map(sw);
   S.done=S.done.map(k=>k.split('\u0001').map((x,i)=>i<2?sw(x):x).join('\u0001'));if(a in W){W[b]=W[a];delete W[a]}
   const pv=$('epayer').value,tv=$('eto').value;render();if(pv===a)$('epayer').value=b;if(tv===a)$('eto').value=b;toast(`이름을 '${b}'(으)로 바꿨어요`)}
 // 지우기 전 상태를 잡아 두고 5초 동안 되돌릴 수 있게
-function undoable(){const id=store.cur,snap=JSON.stringify(S);return()=>{if(!store.list[id])return;store.list[id]=JSON.parse(snap);store.cur=id;S=store.list[id];resetForm();render();toast('되돌렸어요')}}
+function undoable(){const id=store.cur,snap=JSON.stringify({people:S.people,items:S.items,done:S.done});return()=>{const tr=store.list[id];if(!tr)return;Object.assign(tr,JSON.parse(snap));resetForm();store.cur=id;S=tr;resetForm();render();toast('되돌렸어요')}}
 $('edel').onclick=()=>{if(editing<0)return;const idx=editing,id=store.cur,it=S.items.splice(idx,1)[0];resetForm();render();
   const u=()=>{const tr=store.list[id];if(!tr)return;tr.items.splice(Math.min(idx,tr.items.length),0,it);store.cur=id;S=tr;resetForm();render();toast('되돌렸어요')};
   toast(`지웠어요: ${it.t||'기록'}`,u)};
@@ -565,13 +572,13 @@ $('fee').onchange=e=>{const v=parseFloat(e.target.value);S.fee=v>=0&&v<20?v:0;re
 $('fetch').onclick=async()=>{$('rnote').textContent='불러오는 중…';
   try{const j=await(await fetch('https://open.er-api.com/v6/latest/KRW')).json();
     if(!j.rates)throw 0;
-    for(const c in S.rates)if(c!=='KRW'&&num(j.rates[c],1e9))S.rates[c]=+(1/j.rates[c]).toPrecision(4);if(S.start)toast('첫날이 있어서 기록은 그 날 환율로 계산해요. 오늘 환율은 아직 안 온 날짜에 써요',null,4000)
+    let skip=0;for(const c in S.rates)if(c!=='KRW'&&num(j.rates[c],1e9)){if(S.manual[c]){skip++;continue}S.rates[c]=+(1/j.rates[c]).toPrecision(4)}if(skip&&!S.start)toast('직접 넣은 환율은 그대로 뒀어요');if(S.start)toast('첫날이 있어서 기록은 그 날 환율로 계산해요. 오늘 환율은 아직 안 온 날짜에 써요',null,4000)
     render();$('rnote').textContent=`${new Date(j.time_last_update_unix*1000).toLocaleDateString('ko-KR')} 기준`}
   catch(e){$('rnote').textContent='못 불러왔어요. 직접 고쳐 주세요.'}};
 // 지난 환율: 최근 3주 표 또는 고른 날짜 → 줄을 누르면 그 날 환율로 바꿈
 const HIST_CUR=['JPY','USD','EUR','CNY','THB','HKD','SGD','PHP'];
 let hist=null,histOn='';
-const ymd=d=>d.toISOString().slice(0,10);
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; // 이 기기 날짜(UTC 아님)
 async function loadHist(from,to){
   const used=[...new Set([S.cur,...S.items.map(it=>it.cur)])].filter(c=>c!=='KRW');
   const cs=(used.length?used:['JPY','USD']).filter(c=>HIST_CUR.includes(c));
@@ -603,7 +610,7 @@ async function ensureDayRates(){
   try{const j=await(await fetch(`https://api.frankfurter.dev/v1/${from}..${last}?from=KRW&to=${need.join(',')}`)).json();
     for(const d in j.rates||{}){if(!validDate(d))continue;T0.dayRates[d]??={};for(const c in j.rates[d])if(HIST_CUR.includes(c)&&num(j.rates[d][c],1e9))T0.dayRates[d][c]=+(1/j.rates[d][c]).toPrecision(4)}
     T0.dayRates=cleanDayRates(T0.dayRates);if(T0===S)render();else save();
-  }catch(e){drKey=''}
+  }catch(e){setTimeout(()=>{drKey=''},60000)} // 실패 시 화면 그릴 때마다 다시 요청하지 않게
 }
 $('hist').onclick=()=>{const t=new Date();loadHist(ymd(new Date(t-21*864e5)),ymd(t))};
 $('hdate').onchange=e=>{if(e.target.value)loadHist(e.target.value)};
@@ -611,15 +618,14 @@ $('hlist').onclick=e=>{const tr=e.target.closest('tr[data-d]');if(!tr)return;con
   for(const c of hist.cs){const v=hist.rows[d][c];if(num(v,1e9)){keepRate(c);S.rates[c]=+(1/v).toPrecision(4);S.manual[c]=true}}
   histOn=d;render();renderHist();$('rnote').textContent=`${d.slice(5).replace('-','. ')}. 환율 적용`;toast(`${d} 환율로 바꿨어요`)};
 
-function text(){const {tx}=settle(S),T=total(),bc={};
-  S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
+function text(){const {tx}=settle(S),T=total();
   return `[${S.title||'여행 정산'}]\n총 ${won(T)} · ${S.people.length}명 · 1인 평균 ${won(T/S.people.length)}\n`+
-    Object.entries(bc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${CATS[k]} ${won(v)}`).join(' / ')+
+    catRows(S).map(x=>`${x.label} ${won(x.won)}`).join(' / ')+
     `\n\n[보낼 돈]\n`+(tx.length?tx.map(t=>`${t.from} → ${t.to} ${won(t.won)}`).join('\n'):'없음 (딱 맞게 냄)')}
 async function copy(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){showText(t)}}
 // 대화상자 공통: 포커스를 안에 가두고, Esc는 닫기(취소), 닫으면 원래 자리로
 function trapFocus(box,onEsc){const back=document.activeElement;const k=e=>{if(e.key==='Escape'){e.preventDefault();onEsc()}else if(e.key==='Tab'){const f=[...box.querySelectorAll('button,input,textarea,select,[tabindex]')].filter(x=>!x.hidden&&x.offsetParent!==null);if(!f.length)return;const i=f.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();f.at(-1).focus()}else if(!e.shiftKey&&(i===f.length-1||i<0)){e.preventDefault();f[0].focus()}}};
-  document.addEventListener('keydown',k,true);return()=>{document.removeEventListener('keydown',k,true);back&&back.focus&&back.focus()}}
+  document.addEventListener('keydown',k,true);return()=>{document.removeEventListener('keydown',k,true);const to=back&&back.isConnected&&back!==document.body?back:(back&&back.dataset&&back.dataset.ren!=null&&document.querySelector(`[data-ren="${back.dataset.ren}"]`))||$('pname');to&&to.focus&&to.focus()}}
 function dlg(html){const d=document.createElement('div');d.className='dlg';d.innerHTML=`<div role="dialog" aria-modal="true">${html}</div>`;document.body.append(d);d.firstChild.setAttribute('aria-label',(d.querySelector('p')||{}).textContent||'확인');
   const release=trapFocus(d,()=>(d.querySelector('[data-a="0"]')||d.querySelector('[data-a]')).click());const done=()=>{release();d.remove()};d.close=done;
   setTimeout(()=>{const f=d.querySelector('input,[data-a="1"],button');f&&f.focus()},0);return d}
@@ -659,8 +665,7 @@ $('share').onclick=async()=>{const url=baseUrl()+'?d='+await pack(S);if(url.leng
 $('img').onclick=()=>{
   if(!S.items.length||S.people.length<2)return toast('기록이 없어요');
   const {tx}=settle(S),T=total(),W2=1080,F=getComputedStyle(document.body).fontFamily,M='"Settle Mono","Settle Sans",ui-monospace,monospace';
-  const bc={};S.items.filter(it=>it.type!=='tr').forEach(it=>bc[it.cat||'etc']=(bc[it.cat||'etc']||0)+itemWon(it,S));
-  const cats=Object.entries(bc).sort((a,b)=>b[1]-a[1]),allDone=!tx.length||tx.every(t=>S.done.includes(txKey(t)));
+  const cats=catRows(S),allDone=!tx.length||tx.every(t=>S.done.includes(txKey(t)));
   const H=640+Math.max(tx.length,1)*80+cats.length*58+220;
   const c=document.createElement('canvas');c.width=W2;c.height=H;const g=c.getContext('2d');
   const cs=getComputedStyle(document.documentElement),V=k=>cs.getPropertyValue(k).trim();
@@ -683,7 +688,7 @@ $('img').onclick=()=>{
     g.font=`600 36px ${F}`;const w1=g.measureText(lb).width;g.font=`600 36px ${M}`;const w2=g.measureText(won(t.won)).width;
     g.strokeStyle=RULE;g.setLineDash([3,7]);g.lineWidth=2;g.beginPath();g.moveTo(X0+w1+16,y-8);g.lineTo(X1-w2-16,y-8);g.stroke();g.setLineDash([]);y+=18}
   y+=40;line(y);y+=60;g.fillStyle=INK;g.font=`700 30px ${F}`;g.fillText('어디에 썼나',X0,y);
-  for(const [k,v] of cats){y+=58;lr(`${CATS[k]}  ${T?Math.round(v/T*100):0}%`,won(v),y,`400 30px ${F}`,`400 30px ${M}`)}
+  for(const x of cats){y+=58;lr(`${x.label}  ${x.pct}%`,won(x.won),y,`400 30px ${F}`,`400 30px ${M}`)}
   g.fillStyle=SUB;g.font=`400 24px ${M}`;g.textAlign='center';g.fillText('여행 정산',W2/2,zy-40);g.textAlign='left';
   if(allDone){g.save();g.translate(X1-70,104);g.rotate(-0.19);g.strokeStyle=RED;g.fillStyle=RED;g.globalAlpha=.85;g.lineWidth=6;
     g.strokeRect(-95,-48,190,96);g.font=`700 38px ${F}`;g.textAlign='center';g.fillText('정산 완료',0,13);g.restore()}
@@ -731,7 +736,7 @@ $('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b
 $('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
 applyLook();
 resetForm();setMode('spend');render();
-window.__T={clean,settle,pack,unpack,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
+window.__T={clean,settle,pack,unpack,text,catRows,dayRows,ymd,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
 (async()=>{
   const d=new URLSearchParams(location.search).get('d'),h=location.hash.slice(1);
