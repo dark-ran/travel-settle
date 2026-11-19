@@ -115,7 +115,8 @@ button:active{transform:translateY(1px)}
 .bars .r{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;margin:6px 0;font-size:13.5px}
 .bars .t{height:7px;background:var(--soft)}
 .bars .t i{display:block;height:100%;background:var(--ink)}
-.ppl{width:100%;border-collapse:collapse;font-size:13px}
+.ppl{width:100%;border-collapse:collapse;font-size:12.5px}
+.ppl td,.ppl th{white-space:nowrap}
 .ppl td,.ppl th{padding:6px 2px;border-bottom:1px dotted var(--rule);text-align:right}
 .ppl td:first-child,.ppl th:first-child{text-align:left}
 .ppl th{color:var(--sub);font-weight:500;font-size:12px;border-bottom:1px solid var(--ink)}
@@ -452,8 +453,8 @@ function render(){
   const bd={};S.items.filter(it=>it.type!=='tr').forEach(it=>bd[it.day||1]=(bd[it.day||1]||0)+itemWon(it,S));
   $('byday').innerHTML=bars(Object.keys(bd).sort((a,b)=>a-b).map(d=>[`${d}일째`,bd[d]]));
   const hasTr=S.items.some(it=>it.type==='tr');
-  $('bypnote').textContent=hasTr?'받을·보낼 돈 = 낸 돈 − 내 몫 + 미리 준 돈':'받을·보낼 돈 = 낸 돈 − 내 몫';
-  $('byp').innerHTML=`<tr><th>이름</th><th>낸 돈</th><th>내 몫</th>${hasTr?'<th>미리 준(+)·받은(−)</th>':''}<th>받을(+)·보낼(−)</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(paid[p])}</td><td class="num">${won(used[p])}</td>${hasTr?`<td class="num">${sent[p]>0?'+':''}${won(sent[p])}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
+  $('bypnote').textContent=(hasTr?'받을·보낼 = 낸 돈 − 내 몫 + 미리 준 돈':'받을·보낼 = 낸 돈 − 내 몫')+' (+는 받을 돈, −는 보낼 돈)';
+  $('byp').innerHTML=`<tr><th>이름</th><th>낸 돈</th><th>내 몫</th>${hasTr?'<th>미리 준 돈</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(paid[p])}</td><td class="num">${won(used[p])}</td>${hasTr?`<td class="num">${sent[p]>0?'+':''}${won(sent[p])}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
 }
 
 // 휴대폰: 영수증이 화면에 안 보일 때만 아래 띠로 결과 요약
