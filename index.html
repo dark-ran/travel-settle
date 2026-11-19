@@ -140,6 +140,22 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 .dlg>div{background:var(--paper);color:var(--ink);padding:18px;max-width:380px;width:100%;border-radius:2px}
 .dlg p{margin:0 0 14px;white-space:pre-line}
 .dlg textarea{width:100%;height:140px;font:13px/1.5 "Settle Mono","Settle Sans",monospace;background:var(--soft);color:var(--ink);border:1px solid var(--rule);padding:8px;margin-bottom:12px}
+.rbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.rbtns button{padding:10px 4px;font-size:13.5px;white-space:nowrap}
+#bar{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(508px,calc(100% - 24px));display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;z-index:8;box-shadow:0 6px 20px rgba(0,0,0,.18);font-size:14.5px}
+#bar span:last-child{font-weight:400;opacity:.85;white-space:nowrap}
+body.hasbar #toast{bottom:78px}
+.steps{display:flex;gap:6px;margin:14px 0 2px;font-size:13px;color:var(--sub)}
+.steps b{color:var(--ink)}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+input:focus-visible,select:focus-visible{outline:0;border-bottom:2px solid var(--red)}
+@media (min-width:960px){
+  main{max-width:1060px;display:grid;grid-template-columns:minmax(0,1fr) 420px;column-gap:28px;align-items:start}
+  main>*{grid-column:1}
+  #rcpsec{grid-column:2;grid-row:1/span 30;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;margin-top:0}
+  #bar{display:none!important}
+  body.hasbar #toast{bottom:24px}
+}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:2px;opacity:0;transition:.2s;pointer-events:none;max-width:90vw;text-align:center;font-size:14px}
 #toast.on{opacity:1}
 </style>
@@ -160,6 +176,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
   <h2><i>01</i>같이 간 사람 <small>별명이면 충분해요</small></h2>
   <form class="row" id="pf"><input id="pname" placeholder="별명 (예: 민지, 룸메, A)" maxlength="12"><button>추가</button></form>
   <div class="chips" id="people"></div>
+  <div class="steps" id="steps"><b>① 같이 간 사람 2명</b> → ② 쓴 돈 적기 → ③ 정산 영수증</div>
 </section>
 
 <section id="formsec">
@@ -181,17 +198,17 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
   </form>
 </section>
 
-<section>
+<section id="itemsec">
   <h2><i>03</i>기록 <small id="cnt"></small></h2>
   <div id="items"><p class="muted">아직 기록이 없어요.</p></div>
 </section>
 
-<section class="receipt">
+<section class="receipt" id="rcpsec">
   <div id="result"></div>
-  <div class="row" style="margin-top:12px">
-    <button id="copy">카톡용 글 복사</button>
-    <button class="ghost" id="img">이미지로 저장</button>
-    <button class="ghost" id="share">링크로 공유</button>
+  <div class="rbtns">
+    <button id="copy">카톡 글 복사</button>
+    <button class="ghost" id="img">이미지 저장</button>
+    <button class="ghost" id="share">링크 공유</button>
   </div>
 </section>
 
@@ -202,7 +219,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
   <h3>사람별</h3><table class="ppl" id="byp"></table>
 </section>
 
-<section>
+<section id="ratesec">
   <h2><i>05</i>환율 <small>1단위 = 몇 원</small></h2>
   <p class="muted" style="margin-top:0"><b>실제 빠져나간 원화</b>를 적은 기록은 그 금액 그대로 써요. 안 적은 기록은 환율과 카드 수수료로 어림해요(현금은 수수료 없음).<br><b>여행 첫날</b>을 넣으면 기록마다 그 날 환율을 자동으로 쓰고, 아래 환율을 직접 고치거나 지난 환율을 누르면 그 통화는 그 값으로 고정돼요.</p>
   <div class="rate" style="margin-bottom:8px"><span>첫날</span><input type="date" id="start" aria-label="여행 첫날" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote"></span></div>
@@ -219,6 +236,7 @@ details.more summary{cursor:pointer;color:var(--sub);font-size:13.5px;margin:8px
 <p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용(이름·금액)이 담기니 정산할 사람에게만 보내세요.
 <button class="x" id="reset">이 여행 지우기</button></p>
 </main>
+<button id="bar" hidden></button>
 <div id="toast" role="status"></div>
 
 <script>
@@ -365,7 +383,9 @@ function render(){
   save();renderTrips();setTimeout(()=>ensureDayRates&&ensureDayRates(),0);
   $('title').value=S.title;document.title=S.title||'여행 정산';
   $('demo').hidden=S.people.length>0||S.items.length>0;
-  $('people').innerHTML=S.people.map((p,i)=>`<span class="chip del">${esc(p)}<button class="x" data-del="${i}" aria-label="${esc(p)} 빼기">✕</button></span>`).join('')||'<span class="muted">2명 이상 넣어 주세요.</span>';
+  const ready=S.people.length>=2||S.items.length>0;
+  ['formsec','itemsec','rcpsec','ratesec'].forEach(id=>$(id).hidden=!ready);$('steps').hidden=ready;
+  $('people').innerHTML=S.people.map((p,i)=>`<span class="chip del">${esc(p)}<button class="x" data-del="${i}" aria-label="${esc(p)} 빼기">✕</button></span>`).join('')||'';
   S.people.forEach(p=>{if(!(p in W))W[p]=1});
   renderForm();
   $('fee').value=S.fee||0;
@@ -392,10 +412,11 @@ function render(){
   $('rates').innerHTML=rs.filter(([c])=>usedCur.has(c)).map(rateRow).join('');
   $('rates2').innerHTML=rs.filter(([c])=>!usedCur.has(c)).map(rateRow).join('');
   const r=$('result');
-  if(S.people.length<2||!S.items.length){r.innerHTML='<div class="rh"><b>정산 영수증</b><span>사람 2명 이상과 기록 1개가 있으면 여기에 찍혀요</span></div>';$('viz').hidden=true;return}
+  if(S.people.length<2||!S.items.length){r.innerHTML='<div class="rh"><b>정산 영수증</b><span>쓴 돈을 하나 적으면 여기에 찍혀요</span></div>';$('viz').hidden=true;barInfo=null;updBar();return}
   const {bal,tx,paid,used}=settle(S),T=total();
   S.done=S.done.filter(k=>tx.some(t=>txKey(t)===k));
   const left=tx.filter(t=>!S.done.includes(txKey(t))).length;
+  barInfo=`<span>${tx.length?(left?`보낼 돈 ${tx.length}번이면 끝`:'정산 완료'):'보낼 돈 없음'} · <b class="num">${won(T)}</b></span><span>영수증 보기 ↓</span>`;updBar();
   const dt=new Date().toLocaleDateString('ko-KR');
   r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${esc(S.title||'이름 없는 여행')} · ${S.people.length}명 · ${dt}</span></div>
     <div class="rl total"><span>합계</span><span class="num">${won(T)}</span></div>
@@ -414,6 +435,11 @@ function render(){
   $('byp').innerHTML=`<tr><th>이름</th><th>낸 돈</th><th>쓴 몫</th><th>받을·낼 돈</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(paid[p])}</td><td class="num">${won(used[p])}</td><td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
 }
 
+// 휴대폰: 영수증이 화면에 안 보일 때만 아래 띠로 결과 요약
+let barInfo=null,rcpVisible=false;
+function updBar(){const b=$('bar');const show=!!barInfo&&!rcpVisible&&!$('rcpsec').hidden;b.hidden=!show;document.body.classList.toggle('hasbar',show);if(barInfo)b.innerHTML=barInfo}
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{rcpVisible=es[0].isIntersecting;updBar()}).observe($('rcpsec'));
+$('bar').onclick=()=>$('rcpsec').scrollIntoView({behavior:'smooth',block:'start'});
 // ── 이벤트 ──
 $('title').oninput=e=>{S.title=e.target.value;document.title=S.title||'여행 정산';save();renderTrips()};
 $('trips').onchange=e=>{store.cur=e.target.value;S=store.list[store.cur];resetForm();setMode('spend');render()};
