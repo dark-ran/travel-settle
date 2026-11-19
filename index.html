@@ -107,7 +107,7 @@ button:active{transform:translateY(1px)}
 .rh b{display:block;font-size:17px;letter-spacing:.35em;padding-left:.35em}
 .rh span{font-size:12.5px;color:var(--sub)}
 .empty .rbtns,.empty #sharenote{display:none}
-.dprev{margin-top:4px}.dprev p{margin:0 0 6px;font-size:13px}
+.dprev{margin-top:8px;padding:10px 12px;border:1.5px dashed var(--rule);border-radius:4px;color:var(--sub)}.dprev p{margin:0 0 6px;font-size:13px}.dprev .rl,.dprev .rl.total{color:var(--sub);font-size:14px;font-weight:400}
 .rl{display:flex;justify-content:space-between;gap:10px;padding:2px 0;font-size:14px;color:var(--sub)}
 .rl.total{font-size:21px;font-weight:700;color:var(--ink);padding:6px 0 10px;border-bottom:1px dashed var(--rule);margin-bottom:8px}
 .rsub{font-size:13px;font-weight:700;margin:14px 0 4px;letter-spacing:.04em}
@@ -503,9 +503,9 @@ window.addEventListener('storage',e=>{if(e.key!=='trip-settle-v2'||!e.newValue)r
 // 키보드: 누를 수 있는 줄은 엔터·스페이스로도 누름
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button][tabindex]')){e.preventDefault();e.target.click()}});
 // 휴대폰: 영수증이 화면에 안 보일 때만 아래 띠로 결과 요약
-let barInfo=null,rcpVisible=false;
-function updBar(){const b=$('bar');const show=!!barInfo&&!rcpVisible&&!$('rcpsec').hidden;b.hidden=!show;document.body.classList.toggle('hasbar',show);if(barInfo)b.innerHTML=barInfo}
-if('IntersectionObserver' in window)new IntersectionObserver(es=>{rcpVisible=es[0].isIntersecting;updBar()}).observe($('rcpsec'));
+let barInfo=null,rcpVisible=false,formNear=false;
+function updBar(){const b=$('bar');const show=!!barInfo&&!rcpVisible&&!formNear&&!$('rcpsec').hidden;b.hidden=!show;document.body.classList.toggle('hasbar',show);if(barInfo)b.innerHTML=barInfo}
+if('IntersectionObserver' in window){new IntersectionObserver(es=>{rcpVisible=es[0].isIntersecting;updBar()}).observe($('rcpsec'));new IntersectionObserver(es=>{formNear=es[0].isIntersecting;updBar()},{rootMargin:'-80% 0px 0px 0px'}).observe($('formsec'))} // 입력 폼이 화면 아래쪽에 있으면 띠가 가리지 않게 숨김
 $('bar').onclick=()=>$('rcpsec').scrollIntoView({behavior:'smooth',block:'start'});
 // ── 이벤트 ──
 $('title').oninput=e=>{S.title=e.target.value;document.title=S.title||'여행 정산';save();renderTrips()};
@@ -755,7 +755,7 @@ $('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b
 $('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
 applyLook();
 // 예시 버튼 미리보기는 예시 데이터를 실제로 계산해서 채움(손으로 적은 숫자 없음)
-{const d=DEMO(),st=settle(d);demoPrev=`<div class="dprev" id="dprev"><p class="muted"><b style="color:var(--red)">예시</b> ${esc(d.title)} · ${d.people.length}명 (빨간 버튼으로 열어 보기)</p><div class="rl total"><span>합계</span><span class="num">${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</span></div>${st.tx.map(t=>`<div class="rl"><span>${esc(t.from)} → ${esc(t.to)}</span><span class="num">${won(t.won)}</span></div>`).join('')}</div>`;$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
+{const d=DEMO(),st=settle(d);demoPrev=`<div class="dprev" id="dprev"><p class="muted"><b style="color:var(--red)">예시 영수증</b> · ${esc(d.title)} ${d.people.length}명 (빨간 버튼을 누르면 열려요)</p><div class="rl total"><span>합계</span><span class="num">${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</span></div>${st.tx.map(t=>`<div class="rl"><span>${esc(t.from)} → ${esc(t.to)}</span><span class="num">${won(t.won)}</span></div>`).join('')}</div>`;$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
 resetForm();setMode('spend');render();
 window.__T={clean,settle,pack,unpack,text,catRows,dayRows,ymd,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
