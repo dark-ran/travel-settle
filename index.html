@@ -228,7 +228,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
     <button class="ghost" id="img">이미지 저장</button>
     <button class="ghost" id="share">링크 공유</button>
   </div>
-  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크 주소 안에 별명·금액이 담겨요. 주소는 접속 기록에 남을 수 있으니 정산할 사람에게만 보내세요.</p>
+  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크 주소 안에 별명·금액이 담겨 가요. 정산할 사람에게만 보내세요.</p>
 </section>
 
 <section id="viz" hidden>
@@ -455,7 +455,7 @@ function renderNow(){
     const dd=itemDate({day:d},S);
     return `<div class="day"><span>${d}일째${dd?` · ${dd.slice(5).replace('-','. ')}.`:''}</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
       ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">회비</span>${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'먼저 보낸 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
-      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(josa(it.payer,'이','가'))} ${it.cash?'현금으로 냄':'냄'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?` ${it.w[p]}배`:'')).join(', ')}\u00a0몫</div></div>
+      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(josa(it.payer,'이','가'))} ${it.cash?'현금으로 냄':'냄'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`\u00a0${it.w[p]}배`:'')).join(', ')}\u00a0몫</div></div>
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'카드 청구 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span>(${rateFor(it,S).date.slice(5).replace('-','. ')}. 환율)</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
@@ -755,7 +755,7 @@ $('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b
 $('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
 applyLook();
 // 예시 버튼 미리보기는 예시 데이터를 실제로 계산해서 채움(손으로 적은 숫자 없음)
-{const d=DEMO(),st=settle(d);demoPrev=`<div class="dprev" id="dprev"><p class="muted"><b style="color:var(--red)">예시 영수증</b> · ${esc(d.title)} ${d.people.length}명 (빨간 버튼을 누르면 열려요)</p><div class="rl total"><span>합계</span><span class="num">${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</span></div>${st.tx.map(t=>`<div class="rl"><span>${esc(t.from)} → ${esc(t.to)}</span><span class="num">${won(t.won)}</span></div>`).join('')}</div>`;$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
+{const d=DEMO(),st=settle(d);demoPrev=`<div class="dprev" id="dprev"><p class="muted"><b style="color:var(--red)">예시 영수증</b> · ${esc(d.title)} ${d.people.length}명 (빨간 버튼을 누르면 직접 고쳐 볼 수 있어요)</p><div class="rl total"><span>합계</span><span class="num">${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</span></div>${st.tx.map(t=>`<div class="rl"><span>${esc(t.from)} → ${esc(t.to)}</span><span class="num">${won(t.won)}</span></div>`).join('')}</div>`;$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
 resetForm();setMode('spend');render();
 window.__T={clean,settle,pack,unpack,text,catRows,dayRows,ymd,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
