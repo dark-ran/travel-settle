@@ -106,6 +106,8 @@ button:active{transform:translateY(1px)}
 .rh{text-align:center;padding:0 72px 12px;margin-bottom:10px;border-bottom:1px dashed var(--rule)}
 .rh b{display:block;font-size:17px;letter-spacing:.35em;padding-left:.35em}
 .rh span{font-size:12.5px;color:var(--sub)}
+.empty .rbtns,.empty #sharenote{display:none}
+.dprev{margin-top:10px;padding-top:8px;border-top:1px dashed var(--rule)}.dprev p{margin:0 0 6px;font-size:13px}
 .rl{display:flex;justify-content:space-between;gap:10px;padding:2px 0;font-size:14px;color:var(--sub)}
 .rl.total{font-size:21px;font-weight:700;color:var(--ink);padding:6px 0 10px;border-bottom:1px dashed var(--rule);margin-bottom:8px}
 .rsub{font-size:13px;font-weight:700;margin:14px 0 4px;letter-spacing:.04em}
@@ -186,9 +188,9 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
   <form class="row" id="pf"><input id="pname" aria-label="같이 간 사람 별명" placeholder="별명 (예: 민지, 룸메, A)" maxlength="12"><button class="ghost">추가</button></form>
   <p class="muted" style="margin:6px 0 0;font-size:12.5px">실명·계좌번호는 쓰지 마세요.</p>
   <div class="chips" id="people"></div>
-  <div class="opt" style="margin-top:14px"><label class="tlabel" for="title">여행 이름 (선택)</label>
+  <details class="more opt" id="tdet" style="margin-top:14px"><summary>여행 이름·첫날 넣기 (선택)</summary><label class="tlabel" for="title">여행 이름</label>
 <input id="title" maxlength="24" placeholder="예: 도쿄 3박 4일">
-<div class="rate" style="margin-top:8px"><label for="start" class="muted" style="width:auto;font-size:13px">여행 첫날 (선택)</label><input type="date" id="start" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote" style="font-size:12.5px"></span></div></div>
+<div class="rate" style="margin-top:8px"><label for="start" class="muted" style="width:auto;font-size:13px">여행 첫날</label><input type="date" id="start" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote" style="font-size:12.5px"></span></div></details>
   <div class="steps" id="steps"><b>① 사람 2명 이상 넣기</b> → ② 쓴 돈 적기 → ③ 정산 영수증</div>
 </section>
 
@@ -208,7 +210,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
     <div class="full sp"><div class="row" style="justify-content:space-between"><span class="muted">누구 몫? (빠지는 사람은 눌러서 끄세요)</span><label class="muted" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="eratio"> 비율로 나누기</label></div><div class="chips" id="among"></div><p class="muted" id="rhint" hidden style="margin:6px 0 0">숫자만큼 나눠요. 1이 보통, 0.5는 절반만 내요.</p></div>
     <div class="full tr muted" hidden>여행 중에 이미 보낸 돈이나 걷은 회비를 적으면 정산에서 빼 줘요. 예: 도윤이 서연에게 회비 10만 원. 원화로 적어요.</div>
     <select id="eto" class="full tr" aria-label="받은 사람" hidden></select>
-    <div class="full row"><button id="esave" style="flex:1">기록하기</button><button type="button" class="ghost" id="ecancel" hidden>취소</button><button type="button" class="danger" id="edel" hidden>지우기</button></div>
+    <div class="full row"><button id="esave" style="flex:1">영수증에 올리기</button><button type="button" class="ghost" id="ecancel" hidden>취소</button><button type="button" class="danger" id="edel" hidden>지우기</button></div>
   </form>
 </section>
 
@@ -241,7 +243,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
   <div class="rate"><span>수수료</span><input type="number" step="any" min="0" id="fee" aria-label="카드 수수료(%)" style="width:90px"><span>%</span><span class="muted" style="flex-basis:100%;margin-left:54px">카드 결제에만 붙여요 (보통 1~2.5%)</span></div>
   <div id="rates"></div>
   <details class="more"><summary>다른 통화 환율</summary><div id="rates2"></div></details>
-  <div class="row" style="margin-top:8px"><button class="ghost" id="fetch">오늘 환율 불러오기</button><span class="muted" id="rnote">기본 환율: 11월 19일 값</span></div>
+  <div class="row" style="margin-top:8px"><button class="ghost" id="fetch">오늘 환율 불러오기</button><span class="muted" id="rnote"></span></div>
   <div class="row" style="margin-top:8px"><button class="ghost" id="hist">지난 환율 보기</button><input type="date" id="hdate" aria-label="날짜로 환율 찾기" style="width:auto;flex:1;max-width:170px"></div>
   <div id="hlist"></div>
   <p class="muted" id="hnote" hidden style="margin:6px 0 0;font-size:12.5px">주말·공휴일은 환율이 나오지 않아 빠져요. 그날 기록은 바로 전 날 환율로 계산해요.</p>
@@ -345,7 +347,7 @@ const won=n=>(Math.round(n)||0).toLocaleString('ko-KR')+'원'; // -0원 방지
 const blank=()=>({title:'',people:[],items:[],rates:{...DEFAULT_RATES},cur:'JPY',fee:0,done:[],day:1,start:'',manual:{},dayRates:{}});
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let store={cur:'t1',list:{}};
-let noSave=false,pendingSync=null,prevCur=null,wasReady=null,extraOpen=false;
+let demoPrev='',noSave=false,pendingSync=null,prevCur=null,wasReady=null,extraOpen=false;
 let S=load(),mode='spend',W={},cat='food',editing=-1;
 
 // 공유 링크·저장본은 남이 만든 데이터일 수 있으니 형태를 확인해 정리한다
@@ -421,7 +423,7 @@ function renderForm(){
   $('among').innerHTML=S.people.map(p=>{const v=W[p]??1;
     return ratio?`<span class="chip"><span>${esc(p)}</span><input class="w" type="number" min="0" step="any" value="${v}" data-wp="${esc(p)}" aria-label="${esc(p)} 비율"></span>`
       :`<button type="button" class="chip ${v>0?'sel':'off'}" aria-pressed="${v>0}" data-p="${esc(p)}">${v>0?'✓ ':''}${esc(p)}</button>`}).join('')||'<span class="muted">사람을 먼저 넣어 주세요.</span>';
-  $('esave').textContent=editing>=0?'고치기':'기록하기';$('ecancel').hidden=$('edel').hidden=editing<0;
+  $('esave').textContent=editing>=0?'고치기':'영수증에 올리기';$('ecancel').hidden=$('edel').hidden=editing<0;
   $('formh').textContent=editing>=0?'기록 고치기':'기록하기';
 }
 
@@ -455,16 +457,17 @@ function renderNow(){
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'카드 청구 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span>(${rateFor(it,S).date.slice(5).replace('-','. ')}. 환율)</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
-  const lastAuto=c=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return '날짜별 자동'}; // 자동일 땐 마지막 날 환율을 흐리게
-  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?(()=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return ks.length?`원 · 마지막 받은 값 ${S.dayRates[ks.at(-1)][c]} (${ks.at(-1).slice(5).replace('-','/')})`:'원 · 날짜별 자동'})():S.manual[c]?`원 · 직접 입력 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별로 되돌리기</button>`:''}`:'원'}</span></div>`;
-  $('start').value=S.start||'';
+  const lastAuto=()=>'날짜별 자동';
+  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?(()=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return '원 · 날짜별 자동'})():S.manual[c]?`원 · 직접 입력 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별로 되돌리기</button>`:''}`:'원'}</span></div>`;
+  $('start').value=S.start||'';if(S.title||S.start)$('tdet').open=true;
   $('startnote').textContent=S.start?'그 날 환율로 계산해요':'넣으면 그 날 환율로 계산해요';
   const usedCur=new Set([S.cur,...S.items.map(it=>it.cur)]);
   const rs=Object.entries(S.rates).filter(([c])=>c!=='KRW');
   $('rates').innerHTML=rs.filter(([c])=>usedCur.has(c)).map(rateRow).join('');
   $('rates2').innerHTML=rs.filter(([c])=>!usedCur.has(c)).map(rateRow).join('');
   const r=$('result');
-  if(S.people.length<2||!S.items.length){r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${S.people.length<2?'같이 간 사람을 2명 넣고 쓴 돈을 적으면 여기에 찍혀요':'쓴 돈을 하나 적으면 여기에 찍혀요'}</span></div>`;$('viz').hidden=true;barInfo=null;updBar();return}
+  const empty=S.people.length<2||!S.items.length;$('rcpsec').classList.toggle('empty',empty);
+  if(empty){r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${S.people.length<2?'같이 간 사람을 2명 넣고 쓴 돈을 적으면 여기에 찍혀요':'쓴 돈을 하나 적으면 여기에 찍혀요'}</span></div>${demoPrev}`;$('viz').hidden=true;barInfo=null;updBar();return}
   const {bal,tx,paid,used,sent}=settle(S),T=total();
   const doneBefore=S.done.length;S.done=S.done.filter(k=>tx.some(t=>txKey(t)===k));if(S.done.length<doneBefore)setTimeout(()=>{if(!$('toast').querySelector('button'))toast('금액이 바뀌어서 보냄 체크를 풀었어요')},0); // 되돌리기 알림은 덮지 않음
   const left=tx.filter(t=>!S.done.includes(txKey(t))).length;
@@ -750,7 +753,8 @@ $('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b
 $('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
 applyLook();
 // 예시 버튼 미리보기는 예시 데이터를 실제로 계산해서 채움(손으로 적은 숫자 없음)
-{const d=DEMO(),st=settle(d);$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
+{const d=DEMO(),st=settle(d);demoPrev=`<div class="dprev" id="dprev"><p class="muted">예를 들면 이렇게 찍혀요 · ${esc(d.title)} ${d.people.length}명</p><div class="rl total"><span>합계</span><span class="num">${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</span></div>${st.tx.map(t=>`<div class="rl"><span>${esc(t.from)} → ${esc(t.to)}</span><span class="num">${won(t.won)}</span></div>`).join('')}<button type="button" class="ghost" id="dprevb" style="width:100%;margin-top:10px">이 예시 열어 보기</button></div>`;$('demomini').innerHTML=`<i>${esc(d.title)} · ${d.people.length}명 · 합계 <em>${won(d.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,d),0))}</em></i>`+st.tx.map(t=>`<i>${esc(t.from)} → ${esc(t.to)} <em>${won(t.won)}</em></i>`).join('')+`<i>보낼 돈 ${st.tx.length}번이면 끝</i>`}
+$('result').addEventListener('click',e=>{if(e.target.id==='dprevb')$('demo').click()});
 resetForm();setMode('spend');render();
 window.__T={clean,settle,pack,unpack,text,catRows,dayRows,ymd,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
