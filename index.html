@@ -54,7 +54,7 @@ main{max-width:540px;margin:0 auto;padding:22px 16px 80px}
 #title{font-size:19px;font-weight:700;letter-spacing:-.02em;border:0;border-bottom:1.5px dashed var(--rule);border-radius:0;background:transparent;padding:2px 0 4px;width:100%;outline:0}
 #title:focus{border-bottom-color:var(--ink)}
 .tlabel{display:block;font-size:12px;color:var(--sub);margin:4px 0 0}
-#title::placeholder{color:var(--sub);opacity:.75;font-weight:400}
+#title::placeholder{color:var(--sub);opacity:.9;font-weight:400}
 .tag{color:var(--sub);margin:10px 0 16px;font-size:15.5px}
 .tag b{color:var(--ink);font-weight:600}
 section{background:var(--paper);border-radius:2px;padding:18px;margin:14px 0;box-shadow:0 1px 0 rgba(0,0,0,.06)}
@@ -66,7 +66,7 @@ input,select,button,textarea{font:inherit;color:inherit}
 input,select{background:transparent;border:0;border-bottom:1px solid var(--rule);border-radius:0;padding:8px 2px;min-width:0;width:100%;outline:0}
 input:focus,select:focus{border-bottom-color:var(--ink)}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-input::placeholder{color:var(--sub);opacity:.8}
+input::placeholder{color:var(--sub);opacity:.9}
 input[type=number]::placeholder{font-family:var(--font)}
 select{appearance:none;background:linear-gradient(45deg,transparent 50%,var(--sub) 50%) right 6px center/5px 5px no-repeat,linear-gradient(-45deg,transparent 50%,var(--sub) 50%) right 1px center/5px 5px no-repeat;padding-right:16px}
 select option{background:var(--paper);color:var(--ink)}
@@ -119,7 +119,7 @@ button:active{transform:translateY(1px)}
 .bars .r>.num{text-align:right}
 .bars .t i{display:block;height:100%;background:var(--ink)}
 .ppl{width:100%;border-collapse:collapse;font-size:12.5px}
-.ppl td,.ppl th{white-space:nowrap;padding-left:8px}
+.ppl td,.ppl th{white-space:nowrap;padding-left:14px}
 .ppl td,.ppl th{padding:6px 2px;border-bottom:1px dotted var(--rule);text-align:right}
 .ppl td:first-child,.ppl th:first-child{text-align:left}
 .ppl th{color:var(--sub);font-weight:500;font-size:12px;border-bottom:1px solid var(--ink)}
@@ -252,7 +252,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
   <div class="muted">색</div><div class="sw" id="themes"></div>
   <div class="muted">글꼴</div><div class="sw" id="fonts"></div>
 </div></details>
-<p class="muted">로그인·서버 없음. 기록은 이 기기 브라우저에만 저장되고, 공유 링크에는 적은 내용(별명·금액)이 담기니 정산할 사람에게만 보내세요. 환율과 명조·손글씨 글꼴은 인터넷에서 받아요. 첫날을 넣으면 여행 날짜와 통화만 환율 서버로 가요(별명·금액은 보내지 않아요).
+<p class="muted">로그인·서버 없음. 기록은 이 기기에만 저장돼요.<br>환율·일부 글꼴만 인터넷에서 받아요(첫날을 넣으면 여행 날짜와 통화만 전송, 별명·금액은 안 보내요).
 <button class="x" id="reset">이 여행 지우기</button></p>
 </main>
 <button id="bar" hidden></button>
@@ -426,7 +426,7 @@ function renderForm(){
 // 화면 그리기가 겹치지 않게(그리는 도중 blur·change로 다시 불리면 끝난 뒤 한 번 더)
 let inRender=false,again=false,ptrDown=false,deferred=false;
 // 누르고 있는 동안 화면을 다시 그리면 손가락 아래 버튼이 바뀌어 클릭이 사라짐 → 손을 뗀 뒤에 그림
-document.addEventListener('pointerdown',()=>{ptrDown=true},true);
+let ptrTimer;document.addEventListener('pointerdown',()=>{ptrDown=true;clearTimeout(ptrTimer);ptrTimer=setTimeout(()=>{ptrDown=false;if(deferred){deferred=false;render()}},1500)},true);
 ['pointerup','pointercancel','keydown'].forEach(ev=>document.addEventListener(ev,()=>{ptrDown=false;setTimeout(()=>{if(deferred){deferred=false;render()}},0)},true));
 function render(){if(ptrDown){deferred=true;return}if(inRender){again=true;return}inRender=true;const ae=document.activeElement,sel=ae&&ae.id?'#'+ae.id:ae&&ae.dataset&&ae.dataset.wp!=null?`[data-wp="${CSS.escape(ae.dataset.wp)}"]`:ae&&ae.dataset&&ae.dataset.rate?`[data-rate="${ae.dataset.rate}"]`:null;try{renderNow();if(sel&&document.activeElement===document.body){const n=document.querySelector(sel);n&&n.focus()}}finally{inRender=false;if(again){again=false;render()}}}
 function renderNow(){
@@ -472,7 +472,7 @@ function renderNow(){
     <div class="rl total"><span>합계</span><span class="num">${won(T)}</span></div>
     <div class="rl"><span>1인 평균</span><span class="num">${won(T/S.people.length)}</span></div>
     <div class="rl"><span>기록</span><span class="num">${countText(S)}</span></div>
-    <div class="rsub">${tx.length?`보낼 돈 · ${tx.length}번이면 끝${left===0?' (다 보냈어요)':left<tx.length?` (${tx.length-left}번 보냄)`:''}`:'보낼 돈 없음'}</div>
+    <div class="rsub">${tx.length?`보낼 돈 · ${left===0?`${tx.length}건 다 보냈어요`:left<tx.length?`${tx.length}건 중 ${tx.length-left}건 보냄`:`${tx.length}번이면 끝`}`:'보낼 돈 없음'}</div>
     ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="${esc(josa(t.from,'이','가'))} ${esc(t.to)}에게 보냈어요"><span class="who">${esc(t.from)} → ${esc(t.to)}</span><span class="lead"></span><span class="num">${won(t.won)}</span></label>`}).join('')+`<p class="muted" style="margin:8px 0 0">보냈으면 체크해 두세요.</p>`:'<p class="muted">딱 맞게 냈어요.</p>'}
     ${!tx.length||!left?'<div class="stamp">정산<br>완료</div>':''}`;
   // 한눈에 보기 (막대 한 가지 색, 이름·금액은 글자로 함께 표시)
@@ -488,6 +488,8 @@ const mx=Math.max(...rows.map(x=>x.raw),1);return rows.map(x=>`<div class="r"><s
   $('byp').innerHTML=`<tr><th>이름</th><th>낸 돈</th><th>내 몫</th>${hasTr?'<th>먼저 보낸 돈</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(pd[ix[p]])}</td><td class="num">${won(us[ix[p]])}</td>${hasTr?`<td class="num">${sent[p]>0?'보냄 '+won(sent[p]):sent[p]<0?'받음 '+won(-sent[p]):'—'}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
 }
 
+// 같은 기기 다른 탭에서 저장하면 그 내용을 불러옴(한쪽 기록이 사라지지 않게)
+window.addEventListener('storage',e=>{if(e.key!=='trip-settle-v2'||!e.newValue)return;try{const st=JSON.parse(e.newValue);if(!st||!st.list)return;resetForm();const cur=store.cur;store.list={};for(const k in st.list)if(/^t[a-z0-9]{1,20}$/.test(k))store.list[k]=clean(st.list[k]);store.cur=store.list[cur]?cur:Object.keys(store.list)[0];if(!store.list[store.cur])store.list[store.cur]=blank();S=store.list[store.cur];render();toast('다른 탭에서 바뀐 내용을 불러왔어요')}catch(_){}});
 // 키보드: 누를 수 있는 줄은 엔터·스페이스로도 누름
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button][tabindex]')){e.preventDefault();e.target.click()}});
 // 휴대폰: 영수증이 화면에 안 보일 때만 아래 띠로 결과 요약
@@ -497,16 +499,17 @@ if('IntersectionObserver' in window)new IntersectionObserver(es=>{rcpVisible=es[
 $('bar').onclick=()=>$('rcpsec').scrollIntoView({behavior:'smooth',block:'start'});
 // ── 이벤트 ──
 $('title').oninput=e=>{S.title=e.target.value;document.title=S.title||'여행 정산';save();renderTrips()};
-function switchTrip(id){resetForm();store.cur=id;S=store.list[id];resetForm();setMode('spend');render()} // 고치던 기록·통화를 원래 여행에서 먼저 정리
-$('trips').onchange=e=>switchTrip(e.target.value);
+function switchTrip(id){const tt0=$('toast');tt0.classList.remove('on');tt0.style.pointerEvents='none';tt0.textContent='';resetForm();store.cur=id;S=store.list[id];resetForm();setMode('spend');render()} // 고치던 기록·통화를 원래 여행에서 먼저 정리
+$('trips').onchange=e=>{ptrDown=false;switchTrip(e.target.value)}; // 선택창은 뗌 신호가 안 올 수 있음(입력칸 change에서 풀면 첫 누름이 사라지는 버그가 돌아옴)
 $('newtrip').onclick=()=>{if(!S.people.length&&!S.items.length&&!S.title){$('title').focus();return toast('지금 여행이 비어 있어요. 여기에 적으면 돼요')}resetForm();const id=newId();store.list[id]=blank();switchTrip(id);$('title').focus()};
 $('pf').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.isComposing)e.preventDefault()});
-$('pf').onsubmit=e=>{e.preventDefault();const n=$('pname').value.trim();
+const cleanName=v=>v.replace(/[\u0000-\u001f\u007f]/g,'').trim().slice(0,12);
+$('pf').onsubmit=e=>{e.preventDefault();const n=cleanName($('pname').value);
   if(!n)return;if(S.people.includes(n))return toast('이미 있는 이름이에요');if(BAD_NAMES.includes(n))return toast('다른 별명을 써 주세요');if(S.people.length>=30)return toast('30명까지예요');
   S.people.push(n);W[n]=editing>=0?0:1;$('pname').value=''; // 고치던 기록의 몫은 그대로
  render();$('pname').focus()};
-$('people').onclick=async e=>{const ri=e.target.dataset.ren;if(ri!=null){const p=S.people[ri],n=await askText(`'${p}' 이름을 바꿔요`,p);if(!n)return;if(n===p)return toast('이름이 같아요');
-    if(S.people.includes(n))return toast('이미 있는 이름이에요');if(BAD_NAMES.includes(n))return toast('다른 별명을 써 주세요');renamePerson(p,n);return}
+$('people').onclick=async e=>{const ri=e.target.dataset.ren;if(ri!=null){const p=S.people[ri];let v=p,msg=`'${p}' 이름을 바꿔요`;
+    for(;;){const raw=await askText(msg,v);if(raw==null)return;const n=cleanName(raw);if(!n||n===p)return;if(!S.people.includes(n)&&!BAD_NAMES.includes(n)){renamePerson(p,n);return}v=n;msg=S.people.includes(n)?`'${n}'은(는) 이미 있어요. 다른 별명을 넣어 주세요`:'쓸 수 없는 별명이에요. 다른 별명을 넣어 주세요'}}
   const i=e.target.dataset.del;if(i==null)return;const p=S.people[i];
   if(S.items.some(it=>it.payer===p||it.to===p||(it.among||[]).includes(p))&&!await ask(`${josa(p,'이','가')} 들어간 기록이 있어요. 빼면 ${josa(p,'이','가')} 낸 기록은 지워지고, 나눈 기록에서도 빠져요.`,'빼기'))return;
   const u=undoable();S.people.splice(i,1);delete W[p];
@@ -576,7 +579,7 @@ $('fee').onchange=e=>{const v=parseFloat(e.target.value);S.fee=v>=0&&v<20?v:0;re
 $('fetch').onclick=async()=>{const T0=S;$('rnote').textContent='불러오는 중…';
   try{const j=await(await fetch('https://open.er-api.com/v6/latest/KRW')).json();
     if(!j.rates)throw 0;
-    let skip=0;for(const c in T0.rates)if(c!=='KRW'&&num(j.rates[c],1e9)){if(T0.manual[c]){skip++;continue}T0.rates[c]=+(1/j.rates[c]).toPrecision(4)}if(T0!==S){save();return}if(skip&&!S.start)toast('직접 넣은 환율은 그대로 뒀어요');if(S.start)toast('첫날이 있어서 기록은 그 날 환율로 계산해요. 오늘 환율은 아직 안 온 날짜에 써요',null,4000)
+    let skip=0;for(const c in T0.rates)if(c!=='KRW'&&num(j.rates[c],1e9)){if(T0.manual[c]){skip++;continue}T0.rates[c]=+(1/j.rates[c]).toPrecision(4)}if(T0!==S){save();$('rnote').textContent='';return}if(skip&&!S.start)toast('직접 넣은 환율은 그대로 뒀어요');if(S.start)toast('첫날이 있어서 기록은 그 날 환율로 계산해요. 오늘 환율은 아직 안 온 날짜에 써요',null,4000)
     render();$('rnote').textContent=`${new Date(j.time_last_update_unix*1000).toLocaleDateString('ko-KR')} 기준`}
   catch(e){$('rnote').textContent='못 불러왔어요. 직접 고쳐 주세요.'}};
 // 지난 환율: 최근 3주 표 또는 고른 날짜 → 줄을 누르면 그 날 환율로 바꿈
@@ -710,12 +713,12 @@ $('img').onclick=()=>{
 
 const DEMO=()=>{const all=['민지','준호','서연','도윤'];return{...blank(),title:'도쿄 3박 4일',fee:1.5,day:4,start:'2026-11-09',dayRates:{'2026-11-02':{JPY:8.505},'2026-11-03':{JPY:8.495},'2026-11-04':{JPY:8.459},'2026-11-05':{JPY:8.486},'2026-11-06':{JPY:8.582},'2026-11-09':{JPY:8.527},'2026-11-10':{JPY:8.465},'2026-11-11':{JPY:8.396},'2026-11-12':{JPY:8.354}},people:all,items:[
   {t:'회비 먼저 보냄',amt:100000,cur:'KRW',type:'tr',payer:'도윤',to:'서연',day:1},
-  {t:'공항 리무진',amt:5600,cur:'JPY',krw:52890,payer:'준호',among:all,cat:'move',day:1},
+  {t:'공항 리무진',amt:5600,cur:'JPY',krw:48520,payer:'준호',among:all,cat:'move',day:1},
   {t:'숙소 3박',amt:620000,cur:'KRW',payer:'서연',among:all,cat:'stay',day:1},
   {t:'첫날 저녁 라멘',amt:4800,cur:'JPY',payer:'민지',among:all,cat:'food',day:1},
   {t:'편의점 간식',amt:2400,cur:'JPY',cash:1,payer:'도윤',among:all,cat:'food',day:2},
   {t:'디즈니 티켓',amt:31600,cur:'JPY',payer:'민지',among:['민지','서연'],cat:'see',day:2},
-  {t:'이자카야 (도윤은 조금만)',amt:12000,cur:'JPY',payer:'준호',among:all,w:{'민지':1,'준호':1,'서연':1,'도윤':0.5},cat:'food',day:2},
+  {t:'이자카야',amt:12000,cur:'JPY',payer:'준호',among:all,w:{'민지':1,'준호':1,'서연':1,'도윤':0.5},cat:'food',day:2},
   {t:'기념품 과자',amt:3800,cur:'JPY',payer:'서연',among:all,cat:'shop',day:3},
   {t:'공항 가는 전철',amt:5160,cur:'JPY',payer:'민지',among:all,cat:'move',day:4}]}};
 $('demo').onclick=()=>{resetForm();S=DEMO();resetForm();render();$('result').scrollIntoView({behavior:'smooth'});toast('예시예요. 기록을 눌러 고쳐 보세요. 내 여행은 + 새 여행',null,4000)};
