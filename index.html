@@ -228,7 +228,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
     <button class="ghost" id="img">이미지 저장</button>
     <button class="ghost" id="share">링크 공유</button>
   </div>
-  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크에는 별명·금액이 담겨요(링크를 연 웹 서버 기록에 남을 수 있어요). 정산할 사람에게만 보내세요.</p>
+  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크 주소 안에 별명·금액이 담겨요. 주소는 접속 기록에 남을 수 있으니 정산할 사람에게만 보내세요.</p>
 </section>
 
 <section id="viz" hidden>
@@ -469,7 +469,7 @@ function renderNow(){
   $('rates2').innerHTML=rs.filter(([c])=>!usedCur.has(c)).map(rateRow).join('');
   const r=$('result');
   const empty=S.people.length<2||!S.items.length;$('rcpsec').classList.toggle('empty',empty);
-  if(empty){r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${S.people.length<2?'내 기록을 적으면 여기에 찍혀요':'쓴 돈을 하나 적으면 여기에 찍혀요'}</span></div>${demoPrev}`;$('viz').hidden=true;barInfo=null;updBar();return}
+  if(empty){r.innerHTML=`<div class="rh"><b>정산 영수증</b><span>${S.people.length<2?'아직 내 기록이 없어요. 아래는 예시예요':'쓴 돈을 하나 적으면 여기에 찍혀요'}</span></div>${demoPrev}`;$('viz').hidden=true;barInfo=null;updBar();return}
   const {bal,tx,paid,used,sent}=settle(S),T=total();
   const doneBefore=S.done.length;S.done=S.done.filter(k=>tx.some(t=>txKey(t)===k));if(S.done.length<doneBefore)setTimeout(()=>{if(!$('toast').querySelector('button'))toast('금액이 바뀌어서 보냄 체크를 풀었어요')},0); // 되돌리기 알림은 덮지 않음
   const left=tx.filter(t=>!S.done.includes(txKey(t))).length;
@@ -480,7 +480,7 @@ function renderNow(){
     <div class="rl"><span>1인 평균</span><span class="num">${won(T/S.people.length)}</span></div>
     <div class="rl"><span>기록</span><span class="num">${countText(S)}</span></div>
     <div class="rsub">${tx.length?`보낼 돈 · ${left===0?`${tx.length}번 다 보냈어요`:left<tx.length?`${tx.length}번 중 ${tx.length-left}번 보냄`:`${tx.length}번이면 끝`}`:'보낼 돈 없음'}</div>
-    ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="${esc(josa(t.from,'이','가'))} ${esc(t.to)}에게 보냈어요"><span class="who">${esc(t.from)} → ${esc(t.to)}</span><span class="lead"></span><span class="num">${won(t.won)}</span></label>`}).join('')+`<p class="muted" style="margin:8px 0 0">보냈으면 체크해 두세요.</p>`:'<p class="muted">딱 맞게 냈어요.</p>'}
+    ${tx.length?tx.map(t=>{const d=S.done.includes(txKey(t));return `<label class="tx ${d?'done':''}"><input type="checkbox" data-tx="${esc(txKey(t))}" ${d?'checked':''} aria-label="${esc(josa(t.from,'이','가'))} ${esc(t.to)}에게 보냈어요"><span class="who">${esc(t.from)} → ${esc(t.to)}</span><span class="lead"></span><span class="num">${won(t.won)}</span></label>`}).join('')+(left?`<p class="muted" style="margin:8px 0 0">보냈으면 체크해 두세요.</p>`:''):'<p class="muted">딱 맞게 냈어요.</p>'}
     ${!tx.length||!left?'<div class="stamp">정산<br>완료</div>':''}`;
   // 한눈에 보기 (막대 한 가지 색, 이름·금액은 글자로 함께 표시)
   $('viz').hidden=false;
@@ -491,8 +491,8 @@ const mx=Math.max(...rows.map(x=>x.raw),1);return rows.map(x=>`<div class="r"><s
   $('byday').innerHTML=bars(dayRows(S));
   const hasTr=S.items.some(it=>it.type==='tr');
   const P=S.people,pd=P.map(p=>paid[p]),us=P.map(p=>used[p]),ix=Object.fromEntries(P.map((p,i)=>[p,i]));
-  $('bypnote').textContent=(hasTr?'받을·보낼 = 결제한 돈 − 내 몫 + 보낸 회비 − 받은 회비':'받을·보낼 = 결제한 돈 − 내 몫')+' · +는 받을 돈, −는 보낼 돈';
-  $('byp').innerHTML=`<tr><th>이름</th><th>결제한 돈</th><th>내 몫</th>${hasTr?'<th>회비</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(pd[ix[p]])}</td><td class="num">${won(us[ix[p]])}</td>${hasTr?`<td class="num">${sent[p]>0?'보냄 '+won(sent[p]):sent[p]<0?'받음 '+won(-sent[p]):'—'}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
+  $('bypnote').textContent=(hasTr?'받을·보낼 = 결제한 돈 − 내 몫 + 낸 회비 − 걷은 회비':'받을·보낼 = 결제한 돈 − 내 몫')+' · +는 받을 돈, −는 보낼 돈';
+  $('byp').innerHTML=`<tr><th>이름</th><th>결제한 돈</th><th>내 몫</th>${hasTr?'<th>회비</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(pd[ix[p]])}</td><td class="num">${won(us[ix[p]])}</td>${hasTr?`<td class="num">${sent[p]>0?'낸 '+won(sent[p]):sent[p]<0?'걷은 '+won(-sent[p]):'—'}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
 }
 
 // 같은 기기 다른 탭에서 저장하면 그 내용을 불러옴(한쪽 기록이 사라지지 않게)
