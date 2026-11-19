@@ -34,7 +34,7 @@
 :root[data-theme=green]{--bg:#d9e2d3;--paper:#fbfdf8;--ink:#20372a;--sub:#5f7365;--line:#e1e9dc;--rule:#a7b8a3;--red:#c0562b;--soft:#eef4ea}
 :root[data-font=myeongjo]{--font:"Gowun Batang","Nanum Myeongjo",serif}
 :root[data-font=hand]{--font:"Gaegu","Nanum Pen Script",cursive}
-:root[data-font=hand] body{font-size:20px}:root[data-font=hand] .muted,:root[data-font=hand] .m,:root[data-font=hand] .chip,:root[data-font=hand] h3{font-size:17px}:root[data-font=hand] h2{font-size:19px}:root[data-font=hand] #cats .chip{font-size:16px}:root[data-font=hand] .tabs button{font-size:16px}:root[data-font=hand] .item{flex-direction:column;gap:2px}:root[data-font=hand] .item>div:last-child{text-align:left!important}:root[data-font=hand] .item .num{font-size:15px}:root[data-font=hand] .item>div:first-child>div:first-child{font-size:17px}:root[data-font=hand] .item>div:first-child{min-width:0;flex:1}
+:root[data-font=hand] body{font-size:20px}:root[data-font=hand] :is(small,span,td,h2 i,th,.muted,.m,.cat,.rl,.rh span,.bars .r,.ppl,.htab,.tag,.steps,.brand span,.item .num,label,summary,button,select,input,.day,.rsub){font-size:max(16px,1em)!important}:root[data-font=hand] .cat{font-size:15px!important}:root[data-font=hand] .muted,:root[data-font=hand] .m,:root[data-font=hand] .chip,:root[data-font=hand] h3{font-size:17px}:root[data-font=hand] h2{font-size:19px}:root[data-font=hand] #cats .chip{font-size:16px}:root[data-font=hand] .tabs button{font-size:16px}:root[data-font=hand] .item{flex-direction:column;gap:2px}:root[data-font=hand] .item>div:last-child{text-align:left!important}:root[data-font=hand] .item .num{font-size:15px}:root[data-font=hand] .item>div:first-child>div:first-child{font-size:17px}:root[data-font=hand] .item>div:first-child{min-width:0;flex:1}
 .look{margin:14px 0 4px}
 .look summary{list-style:none;cursor:pointer;font-size:13px;color:var(--ink);display:inline-block;border:1px solid var(--rule);padding:6px 10px;border-radius:2px}
 .look summary::-webkit-details-marker{display:none}
@@ -119,7 +119,7 @@ button:active{transform:translateY(1px)}
 .bars .r>.num{text-align:right}
 .bars .t i{display:block;height:100%;background:var(--ink)}
 .ppl{width:100%;border-collapse:collapse;font-size:12.5px}
-.ppl td,.ppl th{white-space:nowrap;padding-left:14px}
+.ppl td,.ppl th{white-space:nowrap;padding-left:18px}
 .ppl td,.ppl th{padding:6px 2px;border-bottom:1px dotted var(--rule);text-align:right}
 .ppl td:first-child,.ppl th:first-child{text-align:left}
 .ppl th{color:var(--sub);font-weight:500;font-size:12px;border-bottom:1px solid var(--ink)}
@@ -127,7 +127,7 @@ button:active{transform:translateY(1px)}
 .rate input{width:130px}
 .rate>.muted{font-size:12.5px}
 .rate span:first-child{width:44px;flex:none;font-family:"Settle Mono","Settle Sans",monospace;font-size:13px}
-.hero{display:block;width:100%;text-align:left;background:var(--ink);color:var(--paper);border:0;padding:14px 16px;font-weight:400}
+.hero{display:block;width:100%;margin-bottom:6px;text-align:left;background:var(--ink);color:var(--paper);border:0;padding:14px 16px;font-weight:400}
 .hero b{font-size:16px;font-weight:700}.hero span{display:block;color:var(--paper);opacity:.85;font-size:13px;margin-top:6px}
 .hero .mini{border-top:1px dashed currentColor;padding-top:6px;display:grid;gap:1px}.hero .mini i{font-style:normal;display:flex;justify-content:space-between}.hero .mini em{font-style:normal;font-family:"Settle Mono","Settle Sans",monospace}
 .trips{display:flex;gap:10px;align-items:center;margin:0 0 6px}
@@ -180,14 +180,15 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
 <p class="tag"><b>쓴 돈만 적으면, 누가 누구에게 얼마 보내면 끝인지</b> 바로 알려 줘요. 출발 전 회비부터 엔화·달러로 쓴 돈까지 한 곳에.</p>
 <button id="demo" class="hero"><b>예시로 먼저 써 보기 →</b><span class="mini" id="demomini"></span></button>
 <div class="trips"><select id="trips" aria-label="여행 고르기"></select><button class="ghost" id="newtrip">+ 새 여행</button></div>
-<label class="tlabel" for="title">여행 이름 (선택)</label>
-<input id="title" maxlength="24" placeholder="예: 도쿄 3박 4일">
-<div class="rate" style="margin-top:8px"><label for="start" class="muted" style="width:auto;font-size:13px">여행 첫날 (선택)</label><input type="date" id="start" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote" style="font-size:12.5px"></span></div>
 
 <section>
   <h2><i>01</i>같이 간 사람 <small>별명이면 충분해요</small></h2>
   <form class="row" id="pf"><input id="pname" aria-label="같이 간 사람 별명" placeholder="별명 (예: 민지, 룸메, A)" maxlength="12"><button class="ghost">추가</button></form>
+  <p class="muted" style="margin:6px 0 0;font-size:12.5px">실명·계좌번호는 쓰지 마세요.</p>
   <div class="chips" id="people"></div>
+  <div class="opt" style="margin-top:14px"><label class="tlabel" for="title">여행 이름 (선택)</label>
+<input id="title" maxlength="24" placeholder="예: 도쿄 3박 4일">
+<div class="rate" style="margin-top:8px"><label for="start" class="muted" style="width:auto;font-size:13px">여행 첫날 (선택)</label><input type="date" id="start" style="width:180px;flex:none;font-size:14px"><span class="muted" id="startnote" style="font-size:12.5px"></span></div></div>
   <div class="steps" id="steps"><b>① 사람 2명 이상 넣기</b> → ② 쓴 돈 적기 → ③ 정산 영수증</div>
 </section>
 
@@ -199,7 +200,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
     <div class="full chips" id="cats" style="margin-top:0"></div>
     <input id="eamt" aria-label="금액" type="number" inputmode="decimal" min="0" step="any" placeholder="금액">
     <select id="ecur" aria-label="통화"></select>
-    <button type="button" class="x full sp" id="ekrwtoggle" style="text-align:left;padding:2px 0" aria-expanded="false">+ 카드 알림의 원화로 적기 · 현금으로 냄</button>
+    <button type="button" class="x full sp" id="ekrwtoggle" style="text-align:left;padding:2px 0" aria-expanded="false">+ 카드 청구 원화·현금</button>
     <input id="ekrw" class="full" aria-label="카드 결제 알림에 뜬 원화" type="number" inputmode="decimal" min="0" step="any" placeholder="카드 결제 알림에 뜬 원화 (모르면 비워 두세요)">
     <label class="full muted sp" id="ecashw" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="ecash"> 현금으로 냈어요 (카드 수수료 안 붙임)</label>
     <select id="eday" aria-label="며칠째"></select>
@@ -223,7 +224,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
     <button class="ghost" id="img">이미지 저장</button>
     <button class="ghost" id="share">링크 공유</button>
   </div>
-  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크에는 별명·금액이 담겨요. 정산할 사람에게만 보내세요.</p>
+  <p class="muted" id="sharenote" style="margin:8px 0 0;font-size:12.5px">링크에는 별명·금액이 담겨요(링크를 연 웹 서버 기록에 남을 수 있어요). 정산할 사람에게만 보내세요.</p>
 </section>
 
 <section id="viz" hidden>
@@ -252,8 +253,8 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
   <div class="muted">색</div><div class="sw" id="themes"></div>
   <div class="muted">글꼴</div><div class="sw" id="fonts"></div>
 </div></details>
-<p class="muted">로그인·서버 없음. 기록은 이 기기에만 저장돼요.<br>환율·일부 글꼴만 인터넷에서 받아요(첫날을 넣으면 여행 날짜와 통화만 전송, 별명·금액은 안 보내요).
-<button class="x" id="reset">이 여행 지우기</button></p>
+<p class="muted">로그인·서버 없음. 기록은 이 기기에만 저장돼요.<br>환율·일부 글꼴만 인터넷에서 받아요 (첫날을 넣으면 여행 날짜와 통화만 전송, 별명·금액은 안 보내요).</p>
+<p><button class="ghost" id="reset" style="padding:8px 12px;font-size:13px">이 여행 지우기</button></p>
 </main>
 <button id="bar" hidden></button>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -267,7 +268,7 @@ const CATS={food:'식비',move:'교통',stay:'숙소',see:'관광',shop:'쇼핑'
 // 불러오기(load)보다 먼저 있어야 하는 값들
 const BAD_NAMES=['__proto__','constructor','prototype']; // 객체 속성과 겹치는 이름은 받지 않음
 const num=(v,max)=>Number.isFinite(+v)&&+v>0&&+v<=max; // 0 초과·유한·상한 이하
-function validDate(v){if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const d=new Date(v+'T00:00:00Z');return !isNaN(d)&&d.toISOString().slice(0,10)===v} // 2월 31일 같은 날짜도 거름
+function validDate(v){if(typeof v!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(v))return false;const d=new Date(v+'T00:00:00Z');return !isNaN(d)&&d.toISOString().slice(0,10)===v&&v>='2000-01-01'&&v<='2100-12-31'} // 2월 31일 같은 날짜도 거름
 function itemDate(it,s){if(!validDate(s.start))return'';const d=new Date(s.start+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+(it.day||1)-1);return d.toISOString().slice(0,10)}
 // 그 기록에 쓸 환율: 직접 고친 통화는 고친 값, 아니면 그 날(주말·공휴일이면 바로 전 영업일) 환율, 없으면 기본값
 function rateFor(it,s){
@@ -339,12 +340,12 @@ function groupRows(s,key){const T=s.items.filter(it=>it.type!=='tr').reduce((a,i
 const catRows=s=>groupRows(s,it=>it.cat||'etc').sort((a,b)=>b.raw-a.raw).map(r=>({...r,label:CATS[r.k]}));
 const dayRows=s=>groupRows(s,it=>it.day||1).sort((a,b)=>a.k-b.k).map(r=>({...r,label:`${r.k}일째`}));
 // 영수증·이미지 카드가 같이 쓰는 날짜: 첫날이 있으면 여행 기간, 없으면 오늘
-function tripDates(s){const fd=d=>d.slice(5).replace('-','. ')+'.',last=Math.max(1,...s.items.map(it=>it.day||1));return validDate(s.start)?`${s.start.slice(0,4)}. ${fd(s.start)} ~ ${fd(itemDate({day:last},s))}`:new Date().toLocaleDateString('ko-KR')}
+function tripDates(s){const fd=d=>d.slice(5).replace('-','. ')+'.',last=Math.max(1,...s.items.map(it=>it.day||1));const e=itemDate({day:last},s);return validDate(s.start)?`${s.start.slice(0,4)}. ${fd(s.start)}~${e.slice(5,7)===s.start.slice(5,7)?e.slice(8)+'.':fd(e)}`:new Date().toLocaleDateString('ko-KR')}
 const won=n=>(Math.round(n)||0).toLocaleString('ko-KR')+'원'; // -0원 방지
 const blank=()=>({title:'',people:[],items:[],rates:{...DEFAULT_RATES},cur:'JPY',fee:0,done:[],day:1,start:'',manual:{},dayRates:{}});
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let store={cur:'t1',list:{}};
-let prevCur=null,wasReady=null,extraOpen=false;
+let noSave=false,pendingSync=null,prevCur=null,wasReady=null,extraOpen=false;
 let S=load(),mode='spend',W={},cat='food',editing=-1;
 
 // 공유 링크·저장본은 남이 만든 데이터일 수 있으니 형태를 확인해 정리한다
@@ -352,9 +353,9 @@ function clean(s){
   const b=blank();if(!s||typeof s!=='object')return b;
   const str=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f]/g,'').slice(0,n):'';
   const people=Array.isArray(s.people)?[...new Set(s.people.map(p=>str(p,12).trim()).filter(p=>p&&!BAD_NAMES.includes(p)))].slice(0,30):[];
-  const rates={...b.rates};if(s.rates&&typeof s.rates==='object')for(const c of Object.keys(s.rates).slice(0,40))if(/^[A-Z]{3}$/.test(c)&&num(s.rates[c],1e7))rates[c]=+s.rates[c];
+  const rates={...b.rates};if(s.rates&&typeof s.rates==='object')for(const c of Object.keys(s.rates).slice(0,40))if(/^[A-Z]{3}$/.test(c)&&num(s.rates[c],1e5))rates[c]=+s.rates[c];
   rates.KRW=1;
-  const items=(Array.isArray(s.items)?s.items:[]).filter(it=>it&&num(it.amt,1e10)&&people.includes(it.payer)&&Object.hasOwn(rates,it.cur)).map(it=>{
+  const items=(Array.isArray(s.items)?s.items:[]).filter(it=>it&&num(it.amt,1e9)&&people.includes(it.payer)&&Object.hasOwn(rates,it.cur)).map(it=>{
     const o={t:str(it.t,30),amt:+it.amt,cur:it.cur,payer:it.payer,day:Math.max(1,Math.min(30,Math.trunc(+it.day)||1))};
     if(it.type==='tr'){o.type='tr';o.to=it.to;o.cur='KRW';return people.includes(it.to)&&it.to!==it.payer?o:null}
     o.among=[...new Set((Array.isArray(it.among)?it.among:[]).filter(p=>people.includes(p)))];
@@ -382,7 +383,7 @@ function load(){
   if(!store.list[store.cur])store.list[store.cur]=blank();
   return store.list[store.cur];
 }
-function save(){store.list[store.cur]=S;try{localStorage.setItem('trip-settle-v2',JSON.stringify(store,(k,v)=>v===S&&prevCur?{...S,cur:prevCur}:v))}catch(e){}} // 고치는 중 바뀐 통화는 저장하지 않음
+function save(){store.list[store.cur]=S;if(noSave)return;try{localStorage.setItem('trip-settle-v2',JSON.stringify(store,(k,v)=>v===S&&prevCur?{...S,cur:prevCur}:v))}catch(e){}} // 고치는 중 바뀐 통화는 저장하지 않음
 function renderTrips(){
   $('trips').innerHTML=Object.entries(store.list).map(([id,s])=>`<option value="${esc(id)}" ${id===store.cur?'selected':''}>${esc(s.title||'이름 없는 여행')}${s.items.length?` · ${countText(s)}`:''}</option>`).join('');
 }
@@ -395,6 +396,7 @@ const total=()=>S.items.filter(it=>it.type!=='tr').reduce((a,it)=>a+itemWon(it,S
 const maxDay=()=>Math.min(30,Math.max(3,S.day,...S.items.map(it=>it.day||1))+1);
 
 function resetForm(){
+  if(pendingSync&&editing>=0){const ps=pendingSync;pendingSync=null;setTimeout(()=>applySync(ps),0)} // 고치기가 끝나면 미뤄 둔 다른 탭 내용 반영
   editing=-1;W=Object.create(null);S.people.forEach(p=>W[p]=1);if(prevCur){S.cur=prevCur;prevCur=null}$('eday').value='';
   $('ewhat').value='';$('eamt').value='';$('ekrw').value='';$('ecash').checked=false;$('eratio').checked=false;$('epayer').value='';
 }
@@ -449,12 +451,12 @@ function renderNow(){
     const dd=itemDate({day:d},S);
     return `<div class="day"><span>${d}일째${dd?` · ${dd.slice(5).replace('-','. ')}.`:''}</span><span class="num">${won(sum)}</span></div>`+list.map(([it,i])=>it.type==='tr'
       ?`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">보냄</span>${esc(it.payer)} → ${esc(it.to)}</div><div class="m">${esc(it.t||'건넨 돈')}</div></div><div class="num">${won(it.amt)}</div></div>`
-      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(josa(it.payer,'이','가'))} ${it.cash?'현금으로 냄':'냄'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?`×${it.w[p]}`:'')).join(', ')}\u00a0몫</div></div>
+      :`<div class="item ${i===editing?'editing':''}" data-ed="${i}" role="button" tabindex="0"><div><div><span class="cat">${CATS[it.cat||'etc']}</span>${esc(it.t||CATS[it.cat||'etc'])}</div><div class="m">${esc(josa(it.payer,'이','가'))} ${it.cash?'현금으로 냄':'냄'} · ${it.among.length===S.people.length&&!it.w?'모두':it.among.map(p=>esc(p)+(it.w&&it.w[p]!=null&&it.w[p]!==1?` ${it.w[p]}배`:'')).join(', ')}\u00a0몫</div></div>
         <div style="text-align:right"><div class="num">${it.cur==='KRW'?won(it.amt):(+it.amt).toLocaleString('ko-KR')+' '+it.cur}</div>${it.cur==='KRW'?'':`<div class="m num">${it.krw?'카드 청구 ':'≈ '}${won(itemWon(it,S))}${!it.krw&&rateFor(it,S).date?` <span>(${rateFor(it,S).date.slice(5).replace('-','. ')}. 환율)</span>`:''}</div>`}</div></div>`).join('')}).join('')
     :'<p class="muted">아직 기록이 없어요.</p>';
   const auto=c=>S.start&&!S.manual[c]&&HIST_CUR.includes(c);
-  const lastAuto=c=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return ks.length?`자동 ${S.dayRates[ks.at(-1)][c]}`:'불러오는 중'}; // 자동일 땐 마지막 날 환율을 흐리게
-  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?'원 · 날짜별 자동':S.manual[c]?`원 · 직접 입력 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별로 되돌리기</button>`:''}`:'원'}</span></div>`;
+  const lastAuto=c=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return '날짜별 자동'}; // 자동일 땐 마지막 날 환율을 흐리게
+  const rateRow=([c,r])=>`<div class="rate"><span>${c}</span><input type="number" step="any" min="0" ${auto(c)?`value="" placeholder="${lastAuto(c)}"`:`value="${r}"`} data-rate="${c}" aria-label="${c} 환율"><span class="muted">${auto(c)?(()=>{const ks=Object.keys(S.dayRates).filter(k=>S.dayRates[k][c]).sort();return ks.length?`원 · 마지막 받은 값 ${S.dayRates[ks.at(-1)][c]} (${ks.at(-1).slice(5).replace('-','/')})`:'원 · 날짜별 자동'})():S.manual[c]?`원 · 직접 입력 ${S.start&&HIST_CUR.includes(c)?`<button class="x" data-auto="${c}">날짜별로 되돌리기</button>`:''}`:'원'}</span></div>`;
   $('start').value=S.start||'';
   $('startnote').textContent=S.start?'그 날 환율로 계산해요':'넣으면 그 날 환율로 계산해요';
   const usedCur=new Set([S.cur,...S.items.map(it=>it.cur)]);
@@ -484,12 +486,15 @@ const mx=Math.max(...rows.map(x=>x.raw),1);return rows.map(x=>`<div class="r"><s
   $('byday').innerHTML=bars(dayRows(S));
   const hasTr=S.items.some(it=>it.type==='tr');
   const P=S.people,pd=P.map(p=>paid[p]),us=P.map(p=>used[p]),ix=Object.fromEntries(P.map((p,i)=>[p,i]));
-  $('bypnote').textContent=(hasTr?'받을·보낼 = 낸 돈 − 내 몫 + 보낸 회비 − 받은 회비':'받을·보낼 = 낸 돈 − 내 몫')+' · +는 받을 돈, −는 보낼 돈';
-  $('byp').innerHTML=`<tr><th>이름</th><th>낸 돈</th><th>내 몫</th>${hasTr?'<th>먼저 보낸 돈</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(pd[ix[p]])}</td><td class="num">${won(us[ix[p]])}</td>${hasTr?`<td class="num">${sent[p]>0?'보냄 '+won(sent[p]):sent[p]<0?'받음 '+won(-sent[p]):'—'}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
+  $('bypnote').textContent=(hasTr?'받을·보낼 = 결제한 돈 − 내 몫 + 보낸 회비 − 받은 회비':'받을·보낼 = 결제한 돈 − 내 몫')+' · +는 받을 돈, −는 보낼 돈';
+  $('byp').innerHTML=`<tr><th>이름</th><th>결제한 돈</th><th>내 몫</th>${hasTr?'<th>회비</th>':''}<th>받을·보낼</th></tr>`+S.people.map(p=>`<tr><td>${esc(p)}</td><td class="num">${won(pd[ix[p]])}</td><td class="num">${won(us[ix[p]])}</td>${hasTr?`<td class="num">${sent[p]>0?'보냄 '+won(sent[p]):sent[p]<0?'받음 '+won(-sent[p]):'—'}</td>`:''}<td class="num ${bal[p]>0?'pos':bal[p]<0?'neg':''}">${bal[p]>0?'+':''}${won(bal[p])}</td></tr>`).join('');
 }
 
 // 같은 기기 다른 탭에서 저장하면 그 내용을 불러옴(한쪽 기록이 사라지지 않게)
-window.addEventListener('storage',e=>{if(e.key!=='trip-settle-v2'||!e.newValue)return;try{const st=JSON.parse(e.newValue);if(!st||!st.list)return;resetForm();const cur=store.cur;store.list={};for(const k in st.list)if(/^t[a-z0-9]{1,20}$/.test(k))store.list[k]=clean(st.list[k]);store.cur=store.list[cur]?cur:Object.keys(store.list)[0];if(!store.list[store.cur])store.list[store.cur]=blank();S=store.list[store.cur];render();toast('다른 탭에서 바뀐 내용을 불러왔어요')}catch(_){}});
+function applySync(raw){try{const st=JSON.parse(raw);if(!st||!st.list)return;const cur=store.cur;store.list={};for(const k in st.list)if(/^t[a-z0-9]{1,20}$/.test(k))store.list[k]=clean(st.list[k]);store.cur=store.list[cur]?cur:Object.keys(store.list)[0];if(!store.list[store.cur])store.list[store.cur]=blank();S=store.list[store.cur];
+  noSave=true;try{render()}finally{noSave=false} // 받은 내용을 다시 저장하면 탭끼리 신호가 오가며 알림·입력이 지워짐
+  if(!$('toast').querySelector('button'))toast('다른 탭에서 바뀐 내용을 불러왔어요')}catch(_){}}
+window.addEventListener('storage',e=>{if(e.key!=='trip-settle-v2'||!e.newValue)return;if(editing>=0||document.querySelector('.dlg')){pendingSync=e.newValue;return}applySync(e.newValue)});
 // 키보드: 누를 수 있는 줄은 엔터·스페이스로도 누름
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button][tabindex]')){e.preventDefault();e.target.click()}});
 // 휴대폰: 영수증이 화면에 안 보일 때만 아래 띠로 결과 요약
@@ -512,7 +517,8 @@ $('people').onclick=async e=>{const ri=e.target.dataset.ren;if(ri!=null){const p
     for(;;){const raw=await askText(msg,v);if(raw==null)return;const n=cleanName(raw);if(!n||n===p)return;if(!S.people.includes(n)&&!BAD_NAMES.includes(n)){renamePerson(p,n);return}v=n;msg=S.people.includes(n)?`'${n}'은(는) 이미 있어요. 다른 별명을 넣어 주세요`:'쓸 수 없는 별명이에요. 다른 별명을 넣어 주세요'}}
   const i=e.target.dataset.del;if(i==null)return;const p=S.people[i];
   if(S.items.some(it=>it.payer===p||it.to===p||(it.among||[]).includes(p))&&!await ask(`${josa(p,'이','가')} 들어간 기록이 있어요. 빼면 ${josa(p,'이','가')} 낸 기록은 지워지고, 나눈 기록에서도 빠져요.`,'빼기'))return;
-  const u=undoable();S.people.splice(i,1);delete W[p];
+  const at=S.people.indexOf(p);if(at<0)return toast('그 사이 바뀌어서 빼지 않았어요');
+  const u=undoable();S.people.splice(at,1);delete W[p];
   S.items=S.items.filter(it=>it.payer!==p&&it.to!==p).map(it=>it.type==='tr'?it:{...it,among:it.among.filter(x=>x!==p)}).filter(it=>it.type==='tr'||it.among.length);
   resetForm();render();u.arm();toast(`${p} 뺐어요`,u)};
 document.querySelector('.tabs').onclick=e=>{const m=e.target.dataset.mode;if(!m)return;if(editing>=0)return toast('고치는 중에는 바꿀 수 없어요. 취소 후 바꿔 주세요');setMode(m)};
@@ -559,7 +565,7 @@ $('items').onclick=e=>{const el=e.target.closest('[data-ed]');if(!el)return;cons
   render();$('formsec').scrollIntoView({behavior:'smooth'})};
 $('ecancel').onclick=()=>{resetForm();render()};
 // 이름 바꾸기: 기록·비율·송금 체크까지 같이 바꿈
-function renamePerson(a,b){const sw=x=>x===a?b:x;S.people=S.people.map(sw);
+function renamePerson(a,b){if(!S.people.includes(a)||S.people.includes(b))return toast('그 사이 바뀌어서 바꾸지 않았어요');const sw=x=>x===a?b:x;S.people=S.people.map(sw);
   S.items=S.items.map(it=>{const o={...it,payer:sw(it.payer)};if(it.to)o.to=sw(it.to);if(it.among)o.among=it.among.map(sw);if(it.w)o.w=Object.fromEntries(Object.entries(it.w).map(([k,v])=>[sw(k),v]));return o});
   S.done=S.done.map(k=>k.split('\u0001').map((x,i)=>i<2?sw(x):x).join('\u0001'));if(a in W){W[b]=W[a];delete W[a]}
   const pv=$('epayer').value,tv=$('eto').value;render();if(pv===a)$('epayer').value=b;if(tv===a)$('eto').value=b;toast(`이름을 '${b}'(으)로 바꿨어요`)}
