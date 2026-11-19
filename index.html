@@ -127,8 +127,8 @@ button:active{transform:translateY(1px)}
 .rate input{width:130px}
 .rate>.muted{font-size:12.5px}
 .rate span:first-child{width:44px;flex:none;font-family:"Settle Mono","Settle Sans",monospace;font-size:13px}
-.hero{display:block;width:100%;margin-bottom:6px;text-align:left;background:var(--ink);color:var(--paper);border:0;padding:14px 16px;font-weight:400}
-.hero b{font-size:16px;font-weight:700}.hero span{display:block;color:var(--paper);opacity:.85;font-size:13px;margin-top:6px}
+.hero{display:block;width:100%;margin-bottom:6px;text-align:left;background:color-mix(in srgb,var(--red) 82%,#000);color:#fff;border:0;padding:14px 16px;font-weight:400}
+.hero b{font-size:17px;font-weight:700}.hero span{display:block;color:#fff;opacity:.92;font-size:13px;margin-top:6px}
 .hero .mini{border-top:1px dashed currentColor;padding-top:6px;display:grid;gap:1px}.hero .mini i{font-style:normal;display:flex;justify-content:space-between}.hero .mini em{font-style:normal;font-family:"Settle Mono","Settle Sans",monospace}
 .trips{display:flex;gap:10px;align-items:center;margin:0 0 6px}
 .trips select{flex:1;font-size:13.5px;padding:4px 16px 4px 0;color:var(--sub)}
@@ -236,7 +236,7 @@ input:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-of
 
 <section id="ratesec">
   <h2><i>05</i>환율 <small>1엔·1달러 = 몇 원</small></h2>
-  <p class="muted" style="margin-top:0"><b>여행 첫날</b>을 넣으면 기록마다 그 날 환율로 계산해요. 카드 결제 알림에 뜬 원화를 적은 기록은 그 금액 그대로예요.</p>
+  <p class="muted" style="margin-top:0"><b>여행 첫날</b>을 넣으면 기록마다 그 날 환율로 계산해요. 카드 결제 알림에 뜬 원화를 적은 기록은 그 금액 그대로예요. 인터넷이 안 돼도 기본 환율로 계산돼요.</p>
   <details class="more" style="margin:-4px 0 8px"><summary>자세히</summary><p class="muted" style="margin:4px 0">원화를 안 적은 기록은 환율에 카드 수수료를 더해 어림해요(현금은 수수료 없음). 주말·공휴일은 바로 전 영업일 환율을 써요. 아래 환율을 직접 고치거나 지난 환율에서 날짜를 누르면 그 통화는 그 값으로 계산하고, '날짜별로 되돌리기'를 누르면 다시 날짜별로 돌아가요.</p></details>
   <div class="rate"><span>수수료</span><input type="number" step="any" min="0" id="fee" aria-label="카드 수수료(%)" style="width:90px"><span>%</span><span class="muted" style="flex-basis:100%;margin-left:54px">카드 결제에만 붙여요 (보통 1~2.5%)</span></div>
   <div id="rates"></div>
@@ -587,7 +587,7 @@ $('fetch').onclick=async()=>{const T0=S;$('rnote').textContent='불러오는 중
     if(!j.rates)throw 0;
     let skip=0;for(const c in T0.rates)if(c!=='KRW'&&num(j.rates[c],1e9)){if(T0.manual[c]){skip++;continue}T0.rates[c]=+(1/j.rates[c]).toPrecision(4)}if(T0!==S){save();$('rnote').textContent='';return}if(skip&&!S.start)toast('직접 넣은 환율은 그대로 뒀어요');if(S.start)toast('첫날이 있어서 기록은 그 날 환율로 계산해요. 오늘 환율은 아직 안 온 날짜에 써요',null,4000)
     render();$('rnote').textContent=`${new Date(j.time_last_update_unix*1000).toLocaleDateString('ko-KR')} 기준`}
-  catch(e){$('rnote').textContent='못 불러왔어요. 직접 고쳐 주세요.'}};
+  catch(e){$('rnote').textContent='못 불러왔어요. 기본 환율로 계산하고 있어요(직접 고쳐도 돼요).'}};
 // 지난 환율: 최근 3주 표 또는 고른 날짜 → 줄을 누르면 그 날 환율로 바꿈
 const HIST_CUR=['JPY','USD','EUR','CNY','THB','HKD','SGD','PHP'];
 let hist=null,histOn='';
