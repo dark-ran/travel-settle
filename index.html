@@ -685,6 +685,7 @@ $('themes').onclick=e=>{const b=e.target.closest('[data-th]');if(b){look.theme=b
 $('fonts').onclick=e=>{const b=e.target.closest('[data-fo]');if(b){look.font=b.dataset.fo;applyLook()}};
 applyLook();
 resetForm();setMode('spend');render();
+window.__T={clean,settle,pack,unpack,get S(){return S},get store(){return store}}; // 자동 회귀 시험(중간작업/회귀시험.js)용 창구
 // 받은 링크 열기: ?d=… (새 형식) 또는 #… (예전 형식). 새 여행으로 추가하고 주소창은 정리
 (async()=>{
   const d=new URLSearchParams(location.search).get('d'),h=location.hash.slice(1);
